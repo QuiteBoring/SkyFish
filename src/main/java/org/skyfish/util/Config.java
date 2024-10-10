@@ -9,6 +9,14 @@ import java.io.File;
 
 public class Config extends Vigilant {
 
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Play Sound",
+            description = "Play an anvil sound when a failsafe is triggered",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_PLAY_SOUND = true;  
+    
     public Config() {
         super(new File("./config/SkyFish.toml"));
         initialize();
