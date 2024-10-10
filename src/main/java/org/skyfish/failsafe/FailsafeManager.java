@@ -1,4 +1,5 @@
 package org.skyfish.failsafe;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -39,6 +40,7 @@ public class FailsafeManager {
     public void onTick(TickEvent.ClientTickEvent event) {
         failsafes.forEach((failsafe) -> failsafe.onTick());
         if (mc.theWorld == null || mc.thePlayer == null || emergencyQueue.isEmpty()) return;
+        
         if (checkTimer.hasElasped(2000) && !triggeredFailsafe.isPresent()) {
             triggeredFailsafe = Optional.of(getHighestPriority());
             LogUtils.sendError(triggeredFailsafe.get().getName() +  " failsafe has been triggered!");
@@ -59,7 +61,7 @@ public class FailsafeManager {
         }
         
         if (triggeredFailsafe.isPresent()) {
-            triggeredFailsafe.get().onFailsafeTrigger();
+            triggeredFailsafe.get().onTrigger();
         }
     }
 

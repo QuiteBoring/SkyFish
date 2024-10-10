@@ -19,6 +19,8 @@ public class Failsafe {
         return type;
     }
 
+    public void onTrigger() {}
+    
     public void onTick() {}
     public void onChat(ClientChatReceivedEvent event) {}
     public void onPacketReceive(PacketReceiveEvent event) {}

@@ -1,16 +1,19 @@
 package org.skyfish.handler;
 
 import net.minecraftforge.common.MinecraftForge;
+import org.skyfish.feature.FeatureManager;
 import org.skyfish.util.LogUtils;
 
 public class MacroHandler {
 
     public void onEnable() {
         LogUtils.sendSuccess("Macro Enabled");
+        FeatureManager.getInstance().enableAll();
     }
 
     public void onDisable() {
         LogUtils.sendSuccess("Macro Disabled");
+        FeatureManager.getInstance().disableAll();
     }
 
     public void initialize() {

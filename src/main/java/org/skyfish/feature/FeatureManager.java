@@ -1,0 +1,63 @@
+package org.skyfish.failsafe;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import org.skyfish.event.PacketReceiveEvent;
+import org.skyfish.util.*;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
+public class FeatureManager {
+
+    private final Minecraft mc = Minecraft.getMinecraft();
+    private final ArrayList<Feature> features = new ArrayList<>();
+    
+    public void initialize() {
+        // failsafes.add(NewFailsafe.getInstance());
+        features.forEach((feature) -> feature.initialize());
+    }
+    
+    public void enableAll() {
+        features.forEach((feature) -> feature.start());
+    }
+
+    public void disableAll() {
+        features.forEach((feature) -> feature.stop());
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        features.forEach((feature) -> {
+            if (feature.isRunning()) feature.onTick();
+        });
+    }
+
+    @SubscribeEvent
+    public void onChat(ClientChatReceivedEvent event) {
+        features.forEach((feature) -> {
+            if (feature.isRunning()) feature.onChat(event);
+        });
+    }
+
+    @SubscribeEvent
+    public void onPacketReceive(PacketReceiveEvent event) {
+        features.forEach((feature) -> {
+            if (feature.isRunning()) feature.onPacketReceive(event);
+        });
+    }
+    
+    private static FeatureManager instance;
+    public static FeatureManager getInstance() {
+        if (instance == null) {
+            instance = new FeatureManager();
+        }
+
+        return instance;
+    }
+  
+}
