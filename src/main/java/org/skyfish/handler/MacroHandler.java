@@ -1,15 +1,21 @@
 package org.skyfish.handler;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import org.skyfish.feature.FeatureManager;
 import org.skyfish.util.LogUtils;
+import org.skyfish.util.helper.Rotation;
 
 public class MacroHandler {
+
+    private final Minecraft mc = Minecraft.getMinecraft();
+    private MovingObjectPosition mainLookAtBlock = null;
 
     @SubscribeEvent
     public void onTick() {
         if (mc.theWorld == null || mc.thePlayer == null || !isEnabled()) return;
-
         if (mc.currentScreen != null) {
             if (!isPaused()) pauseMacro();
         } else if ((mc.currentScreen == null) ) {
@@ -17,16 +23,35 @@ public class MacroHandler {
         }
     }
 
+    public Rotation getAngle() {
+        BlockPos blockPos = new BlockPos(mainLookAtBlock.getBlockPos().getX() + 1, mainLookAtBlock.getBlockPos().getY(), mainLookAtBlock.getBlockPos().getZ());
+        Vec3 playerPos = mc.thePlayer.getPositionVector();
+        float pitchOffset = (float) ((Math.random() * (2.5 - -2.5)) + -2.5);
+        float yawOffset = (float) ((Math.random() * (2.5 - -2.5)) + -2.5);
+        double diffX = blockPos.getX() - playerPos.xCoord - 0.5;
+        double diffY = blockPos.getY() - (playerPos.yCoord + mc.thePlayer.getEyeHeight()) + 0.5;
+        double diffZ = blockPos.getZ() - playerPos.zCoord + 0.5;
+        float yaw = (float) (Math.toDegrees(Math.atan2(diffZ, diffX))) - 90.0f;
+        double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
+        float pitch = (float) (-(Math.toDegrees(Math.atan2(diffY, dist))));
+        return new Rotation(
+                mc.thePlayer.rotationYaw + MathHelper.wrapAngleTo180_float(yaw - mc.thePlayer.rotationYaw) + yawOffset,
+                mc.thePlayer.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - mc.thePlayer.rotationPitch) + pitchOffset
+        );
+    }
+
     public void onEnable() {
+        mainLookAtBlock = mc.thePlayer.rayTrace(100.0, 1.0f);
         setStep(Step.FIND_ROD);
         LogUtils.sendSuccess("Macro Enabled");
-        FeatureManager.getInstance().enableAll();
+        unpauseMacro();
     }
 
     public void onDisable() {
+        mainLookAtBlock = null;
         setStep(Step.NONE);
         LogUtils.sendSuccess("Macro Disabled");
-        FeatureManager.getInstance().disableAll();
+        pauseMacro();
     }
 
     public void initialize() {
@@ -51,10 +76,12 @@ public class MacroHandler {
 
     public void pauseMacro()  {
         paused = true;
+        FeatureManager.getInstance().disableAll();
     }
 
     public void unpauseMacro()  {
         paused = false; 
+        FeatureManager.getInstance().enableAll();
     }
 
     public boolean isPaused() {

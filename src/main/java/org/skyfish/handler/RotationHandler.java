@@ -27,6 +27,10 @@ public class RotationHandler {
         done = false;
     }
 
+    public boolean isDone() {
+        return done;
+    }
+
     public void initialize() {
         MinecraftForge.EVENT_BUS.register(this);
     }

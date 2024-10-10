@@ -8,4 +8,13 @@ public class AutoFlare extends Feature {
         super("AutoFlare");
     }
 
+    private static AutoFlare instance;
+    public static AutoFlare getInstance() {
+        if (instance == null) {
+            instance = new AutoFlare();
+        }
+
+        return instance;
+    }
+
 }

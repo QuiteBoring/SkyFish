@@ -8,4 +8,13 @@ public class AutoTotem extends Feature {
         super("AutoTotem");
     }
 
+    private static AutoTotem instance;
+    public static AutoTotem getInstance() {
+        if (instance == null) {
+            instance = new AutoTotem();
+        }
+
+        return instance;
+    }
+
 }

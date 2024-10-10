@@ -7,7 +7,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.skyfish.event.PacketReceiveEvent;
-import org.skyfish.feature.impl.FishingMacro;
+import org.skyfish.feature.impl.*;
+import org.skyfish.handler.MacroHandler;
 import org.skyfish.util.*;
 
 import java.util.ArrayList;
@@ -38,22 +39,24 @@ public class FeatureManager {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        if (mc.theWorld == null || mc.thePlayer == null) return;
+
         features.forEach((feature) -> {
-            if (feature.isRunning()) feature.onTick();
+            if (feature.isRunning() && !MacroHandler.getInstance().isPaused()) feature.onTick();
         });
     }
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
         features.forEach((feature) -> {
-            if (feature.isRunning()) feature.onChat(event);
+            if (feature.isRunning() && !MacroHandler.getInstance().isPaused()) feature.onChat(event);
         });
     }
 
     @SubscribeEvent
     public void onPacketReceive(PacketReceiveEvent event) {
         features.forEach((feature) -> {
-            if (feature.isRunning()) feature.onPacketReceive(event);
+            if (feature.isRunning() && !MacroHandler.getInstance().isPaused()) feature.onPacketReceive(event);
         });
     }
     

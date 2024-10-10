@@ -14,4 +14,13 @@ public class FishingMacro extends Feature {
         
     }
 
+    private static FishingMacro instance;
+    public static FishingMacro getInstance() {
+        if (instance == null) {
+            instance = new FishingMacro();
+        }
+
+        return instance;
+    }
+
 }
