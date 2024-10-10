@@ -59,6 +59,7 @@ sourceSets.main {
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
     maven("https://repo.spongepowered.org/maven/")
     maven("https://repo.essential.gg/repository/maven-public")
     // If you don't want to log in with your real minecraft account, remove this line
@@ -86,6 +87,14 @@ dependencies {
     shadowImpl("gg.essential:loader-launchwrapper:1.1.3")
     implementation("gg.essential:loader-launchwrapper:1.1.3")
     implementation("gg.essential:essential-1.8.9-forge:3662")
+
+    implementation("com.github.onixiya1337.baritone-fly:baritone-deobf:nirox-fly-SNAPSHOT")
+    shadowImpl("com.github.onixiya1337.baritone-fly:baritone-api-forge:nirox-fly-SNAPSHOT") {
+        exclude(module = "fastutil")
+        exclude(module = "lwjgl")
+        exclude(module = "SimpleTweaker")
+        exclude(module = "launchwrapper")
+    }
 }
 
 // Tasks:
