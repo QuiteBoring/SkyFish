@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.skyfish.event.PacketReceiveEvent;
+import org.skyfish.feature.impl.FishingMacro;
 import org.skyfish.util.*;
 
 import java.util.ArrayList;
@@ -18,7 +19,12 @@ public class FeatureManager {
     private final ArrayList<Feature> features = new ArrayList<>();
     
     public void initialize() {
-        // failsafes.add(NewFailsafe.getInstance());
+        features.add(FishingMacro.getInstance());
+        features.add(AutoKill.getInstance());
+        features.add(AutoTotem.getInstance());
+        features.add(AutoFlare.getInstance());
+        features.add(AutoCrouch.getInstance());
+        features.add(UngrabMouse.getInstance());
         features.forEach((feature) -> feature.initialize());
     }
     
