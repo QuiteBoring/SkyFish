@@ -75,11 +75,15 @@ public class AutoFlare extends Feature {
             Matcher matcher = ORB_PATTERN.matcher(StringUtils.stripControlCodes(nameTag));
 
             if (matcher.matches()) {
-                ItemStack helmet = entity.getCurrentArmor(3);
-                
-                if (helmet != null && (flare == null || flare.isDead)) {
-                    flare = entity;
-                    LogUtils.sendSuccess("Found Orb");
+                List<EntityArmorStand> surroundingArmorStands = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityArmorStand.class, new AxisAlignedBB(entity.posX - 0.1, entity.posY - 3, entity.posZ - 0.1, entity.posX + 0.1, entity.posY, entity.posZ + 0.1));
+                if (!surroundingArmorStands.isEmpty()) {
+                    for (EntityArmorStand surroundingArmorStand : surroundingArmorStands) {
+                        ItemStack helmet = surroundingArmorStand.getCurrentArmor(3);
+                        if (helmet != null) {
+                            LogUtils.sendSuccess("Found Orb");
+                            flare = surroundingArmorStand;
+                        }
+                    }
                 }
             }
         }       
