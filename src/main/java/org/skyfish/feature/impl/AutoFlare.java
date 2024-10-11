@@ -1,6 +1,6 @@
 package org.skyfish.feature.impl;
 
-import net.minecraft.entity.item.Entity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
