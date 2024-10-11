@@ -102,7 +102,7 @@ public class AutoFlare extends Feature {
         public final EntityArmorStand entity;
         public final OrbType type;
         
-        public Flare(EntityArmorStand entity, OrbType type) {
+        public Orb(EntityArmorStand entity, OrbType type) {
             this.entity = entity;
             this.type = type;
         }
