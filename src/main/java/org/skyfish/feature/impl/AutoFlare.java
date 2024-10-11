@@ -58,18 +58,18 @@ public class AutoFlare extends Feature {
             if (matcher.matches()) {
                 List<EntityArmorStand> armorStands = mc.theWorld.getEntitiesWithinAABB(EntityArmorStand.class, new AxisAlignedBB(entity.posX - 0.1, entity.posY - 3, entity.posZ - 0.1, entity.posX + 0.1, entity.posY, entity.posZ + 0.1));
                 if (!armorStands.isEmpty()) {
-                    EntityArmorStand orb = null;
+                    EntityArmorStand orbStand = null;
 
                     for (EntityArmorStand stand : armorStands) {
                         ItemStack helmet = stand.getCurrentArmor(3);
                         if (helmet != null) {
-                            orb = stand;
+                            orbStand = stand;
                             LogUtils.sendSuccess("Found Orb");
                         }
                     }
 
                     if (flare == null || flare.isDead) {
-                        flare = orb;
+                        flare = orbStand;
                     }
                 }
             }
