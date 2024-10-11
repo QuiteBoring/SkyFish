@@ -28,6 +28,7 @@ public class AutoFlare extends Feature {
     
         if (entity instanceof EntityArmorStand && entity.hasCustomName()) {
             detectOrb(entity);
+            LogUtils.sendSuccess("WOW");
 
             if (flare == null || flare.isDead) {
                 detectFlare((EntityArmorStand) entity);
