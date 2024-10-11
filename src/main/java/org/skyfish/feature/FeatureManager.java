@@ -27,6 +27,7 @@ public class FeatureManager {
         features.add(AutoFlare.getInstance());
         features.add(AutoCrouch.getInstance());
         features.add(UngrabMouse.getInstance());
+        features.add(AntiAFK.getInstance());
         features.forEach((feature) -> feature.initialize());
         MinecraftForge.EVENT_BUS.register(this);
     }
