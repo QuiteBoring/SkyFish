@@ -39,7 +39,8 @@ public class AutoFlare extends Feature {
             if (head == null || !head.hasTagCompound()) continue;
             int type = getFlareType(head);
             if (type == -1) continue;
-            flare = armorstand;
+            LogUtils.sendSuccess("Found Flare");
+            if (flare == null || flare.isDead) flare = armorstand;
         }
     }
     
@@ -78,6 +79,7 @@ public class AutoFlare extends Feature {
                 
                 if (helmet != null && (flare == null || flare.isDead)) {
                     flare = entity;
+                    LogUtils.sendSuccess("Found Orb");
                 }
             }
         }       
