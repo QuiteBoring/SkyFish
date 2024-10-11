@@ -2,6 +2,7 @@ package org.skyfish.feature.impl;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -27,12 +28,8 @@ public class AutoFlare extends Feature {
         Entity entity = event.entity;
     
         if (entity instanceof EntityArmorStand && entity.hasCustomName()) {
-            detectOrb(entity);
-            LogUtils.sendSuccess("WOW");
-
-            if (flare == null || flare.isDead) {
-                detectFlare((EntityArmorStand) entity);
-            }
+            detectOrb((EntityArmorStand) entity);
+            detectFlare((EntityArmorStand) entity);
         }
     }
 
@@ -41,15 +38,34 @@ public class AutoFlare extends Feature {
     }
     
     public void detectFlare(EntityArmorStand entity) {
-        if (entity.getDistanceToEntity(mc.thePlayer) > 40 || entity.ticksExisted > 3600) return;
-        ItemStack helm = entity.getCurrentArmor(3);
-        if (helm != null) {
-            flare = entity;
-            LogUtils.sendSuccess("Found Flare");
+        if (entity.ticksExisted > 3600) continue;
+        String[] flareSkins = new String[] { "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzMwNjIyMywKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjJlMmJmNmMxZWMzMzAyNDc5MjdiYTYzNDc5ZTU4NzJhYzY2YjA2OTAzYzg2YzgyYjUyZGFjOWYxYzk3MTQ1OCIKICAgIH0KICB9Cn0=", "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzMyNjQzMiwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWQyYmY5ODY0NzIwZDg3ZmQwNmI4NGVmYTgwYjc5NWM0OGVkNTM5YjE2NTIzYzNiMWYxOTkwYjQwYzAwM2Y2YiIKICAgIH0KICB9Cn0=", "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzM0NzQ4OSwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzAwNjJjYzk4ZWJkYTcyYTZhNGI4OTc4M2FkY2VmMjgxNWI0ODNhMDFkNzNlYTg3YjNkZjc2MDcyYTg5ZDEzYiIKICAgIH0KICB9Cn0=" };
+        for (String flareSkin : flareSkins) {
+            if (hasSkullTexture(entity, flareSkin)) {
+                flare = entity;
+            }
         }
     }
+
+    private boolean hasSkullTexture(EntityArmorStand entity, String skin) {
+        ItemStack[] inventory = entity.getInventory();
+        
+        if (inventory != null) {
+            NBTTagCompound tagCompound = entity.getNBTTagCompound();
+            
+            for (ItemStack itemStack : inventory) {
+                if (itemStack != Items.skull) continue;
+                if (tagCompound == null) continue;
+                if (!tagCompound.hasKey("SkullOwner")) continue;
+                String texture = tagCompound.getCompoundTag("SkullOwner").getCompoundTag("Properties").getTagList("textures", NBTTagCompound.TYPE).getCompoundTagAt(0).getString("Value");
+                if (texture != null && texture.equals(skin)) return true;
+            }
+        }
+
+        return false;
+    }
     
-    public void detectOrb(Entity entity) {
+    public void detectOrb(EntityArmorStand entity) {
         String nameTag = entity.getCustomNameTag();
         Orb orb = Orb.getByName(nameTag);
         
@@ -57,21 +73,10 @@ public class AutoFlare extends Feature {
             Matcher matcher = ORB_PATTERN.matcher(StringUtils.stripControlCodes(nameTag));
 
             if (matcher.matches()) {
-                List<EntityArmorStand> armorStands = mc.theWorld.getEntitiesWithinAABB(EntityArmorStand.class, new AxisAlignedBB(entity.posX - 0.1, entity.posY - 3, entity.posZ - 0.1, entity.posX + 0.1, entity.posY, entity.posZ + 0.1));
-                if (!armorStands.isEmpty()) {
-                    EntityArmorStand orbStand = null;
-
-                    for (EntityArmorStand stand : armorStands) {
-                        ItemStack helmet = stand.getCurrentArmor(3);
-                        if (helmet != null) {
-                            orbStand = stand;
-                            LogUtils.sendSuccess("Found Orb");
-                        }
-                    }
-
-                    if (flare == null || flare.isDead) {
-                        flare = orbStand;
-                    }
+                ItemStack helmet = entity.getCurrentArmor(3);
+                
+                if (helmet != null && (flare == null || flare.isDead)) {
+                    flare = entity;
                 }
             }
         }       
