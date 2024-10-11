@@ -25,15 +25,18 @@ public class AutoFlare extends Feature {
         super("AutoFlare");
     }
 
-    // @SubscribeEvent
-    // public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-    //     Entity entity = event.entity;
+    @SubscribeEvent
+    public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+        Entity entity = event.entity;
     
-    //     if (entity instanceof EntityArmorStand && entity.hasCustomName()) {
-    //         detectOrb((EntityArmorStand) entity);
-    //         detectFlare((EntityArmorStand) entity);
-    //     }
-    // }
+        if (entity instanceof EntityArmorStand && entity.hasCustomName()) {
+            detectOrb((EntityArmorStand) entity);
+
+            if (flare == null || flare.isDead) {
+                detectFlare((EntityArmorStand) entity);
+            }
+        }
+    }
 
     public boolean shouldPlace() {
         return flare != null && !flare.isDead;
