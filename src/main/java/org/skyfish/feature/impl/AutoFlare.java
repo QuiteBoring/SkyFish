@@ -44,6 +44,7 @@ public class AutoFlare extends Feature {
             if (type == -1) {
                 continue;
             }
+            flare = armorstand;
         }
     }
     
