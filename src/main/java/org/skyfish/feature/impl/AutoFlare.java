@@ -1,10 +1,9 @@
 package org.skyfish.feature.impl;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -35,15 +34,10 @@ public class AutoFlare extends Feature {
             double distance = Math.sqrt(Math.pow(armorstand.getPosition().getX() - playerX, 2) + Math.pow(armorstand.getPosition().getY() - playerY, 2) + Math.pow(armorstand.getPosition().getZ() - playerZ, 2));
             if (distance > 40 || armorstand.ticksExisted > 3600) continue;
             EntityLivingBase as = (EntityLivingBase) armorstand;
-            ItemStack head = as.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-            if (head.isEmpty()) {
-                continue;
-            }
+            ItemStack head = as.getEquipmentInSlot(4);
+            if (head == null || !head.hasTagCompound()) continue;
             int type = getFlareType(head);
-
-            if (type == -1) {
-                continue;
-            }
+            if (type == -1) continue;
             flare = armorstand;
         }
     }
