@@ -3,6 +3,7 @@ package org.skyfish.feature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -27,6 +28,7 @@ public class FeatureManager {
         features.add(AutoCrouch.getInstance());
         features.add(UngrabMouse.getInstance());
         features.forEach((feature) -> feature.initialize());
+        MinecraftForge.EVENT_BUS.register(this);
     }
     
     public void enableAll() {
