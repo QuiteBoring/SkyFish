@@ -2,17 +2,21 @@ package org.skyfish.feature.impl;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.skyfish.feature.Feature;
+import org.skyfish.util.LogUtils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AutoFlare extends Feature {
 
     private final Pattern ORB_PATTERN = Pattern.compile("[A-Za-z ]* (?<seconds>[0-9]*)s");
-    private final EntityArmorStand flare = null;
+    private EntityArmorStand flare = null;
     
     public AutoFlare() {
         super("AutoFlare");
@@ -49,11 +53,11 @@ public class AutoFlare extends Feature {
         Orb orb = Orb.getByName(nameTag);
         
         if (orb != null && orb.isInRadius(entity.getDistanceSqToEntity(mc.thePlayer))) { 
-            Matcher matcher = ORB_PATTERN.matcher(TextUtils.stripColor(nameTag));
+            Matcher matcher = ORB_PATTERN.matcher(StringUtils.stripControlCodes(nameTag));
 
             if (matcher.matches()) {
                 List<EntityArmorStand> armorStands = mc.theWorld.getEntitiesWithinAABB(EntityArmorStand.class, new AxisAlignedBB(entity.posX - 0.1, entity.posY - 3, entity.posZ - 0.1, entity.posX + 0.1, entity.posY, entity.posZ + 0.1));
-                if (!surroundingArmorStands.isEmpty()) {
+                if (!armorStands.isEmpty()) {
                     EntityArmorStand orb = null;
 
                     for (EntityArmorStand stand : armorStands) {
