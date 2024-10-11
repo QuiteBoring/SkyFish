@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.skyfish.feature.FeatureManager;
 import org.skyfish.util.LogUtils;
 import org.skyfish.util.helper.Rotation;
@@ -14,7 +15,7 @@ public class MacroHandler {
     private MovingObjectPosition mainLookAtBlock = null;
 
     @SubscribeEvent
-    public void onTick() {
+    public void onTick(TickEvent.ClientTickEvent event) {
         if (mc.theWorld == null || mc.thePlayer == null || !isEnabled()) return;
         if (mc.currentScreen != null) {
             if (!isPaused()) pauseMacro();
