@@ -39,8 +39,8 @@ public class AutoFlare extends Feature {
             ItemStack head = as.getEquipmentInSlot(4);
             if (head == null || !head.hasTagCompound()) continue;
             Flare.Type type = getFlareType(head);
-            if (type == null) continue;
-            if (this.flare == null || this.flare.isDead || Flare.isBetterThan(type)) this.flare = new Flare(armorstand, type);
+            if (type == null || this.flare != null || !this.flare.isDead) continue;
+            if (type == getFlareTypeHotbar()) this.flare = new Flare(armorstand, type);
         }
     }
     
@@ -74,8 +74,8 @@ public class AutoFlare extends Feature {
                     if (!surroundingArmorStands.isEmpty()) {
                         for (EntityArmorStand surroundingArmorStand : surroundingArmorStands) {
                             ItemStack helmet = surroundingArmorStand.getCurrentArmor(3);
-                            if (helmet != null) {
-                                if (this.orb == null || this.orb.isDead || this.orb.isBetterThan(orb)) this.orb = new Orb(surroundingArmorStand, orb);
+                            if (helmet != null && (this.orb == null || this.orb.isDead) && orb == getOrbTypeHotbar()) {
+                                this.orb = new Orb(surroundingArmorStand, orb);
                             }
                         }
                     }
@@ -84,9 +84,43 @@ public class AutoFlare extends Feature {
         }
     }
 
+    public OrbType getOrbTypeHotbar() {
+        OrbType orbType = null;
+        int slot = InventoryUtils.searchItem("Orb");
+
+        if (slot != -1) {
+            ItemStack itemStack = mc.thePlayer.inventory.mainInventory[slot];
+            String name = StringUtils.stripControlCodes(itemStack.getDisplayName()).toLowerCase();
+
+            if (name.contains("plasmaflux")) orbType = OrbType.PLASMAFLUX;
+            if (name.contains("overflux")) orbType = OrbType.OVERFLUX;
+            if (name.contains("mana flux")) orbType = OrbType.MANA_FLUX;
+            if (name.contains("radiant")) orbType = OrbType.RADIANT;
+        }
+
+        return orbType;
+    }
+
+    public Flare.Type getFlareTypeHotbar() {
+        Flare.Type flareType = null;
+        int slot = InventoryUtils.searchItem("Flare");
+
+        if (slot != -1) {
+            ItemStack itemStack = mc.thePlayer.inventory.mainInventory[slot];
+            String name = StringUtils.stripControlCodes(itemStack.getDisplayName()).toLowerCase();
+
+            if (name.contains("sos")) flareType = Flare.Type.SOS;
+            if (name.contains("alert")) flareType = Flare.Type.ALERT;
+            if (name.contains("warning")) flareType = Flare.Type.WARNING;
+        }
+
+        return flareType;
+    }
+    
     public boolean shouldPlace() {
-        
-        return ;
+        if (getOrbTypeHotbar() != null && (orb == null || orb.isDead)) return true;
+        if (getFlareTypeHotbar() != null && (flare == null || flare.isDead)) return true;
+        return false;
     }
     
     private static AutoFlare instance;
@@ -117,19 +151,17 @@ public class AutoFlare extends Feature {
     }
         
     private static enum OrbType {
-        RADIANT("§aRadiant", 18*18, 1),
-        MANA_FLUX("§9Mana Flux", 18*18, 2),
-        OVERFLUX("§5Overflux", 18*18, 3),
-        PLASMAFLUX("§d§lPlasmaflux", 20*20, 4);
+        RADIANT("§aRadiant", 18*18),
+        MANA_FLUX("§9Mana Flux", 18*18),
+        OVERFLUX("§5Overflux", 18*18),
+        PLASMAFLUX("§d§lPlasmaflux", 20*20);
 
         private String display;
         private int rangeSquared;
-        public final int priority;
         
-        private OrbType(String display, int rangeSquared, int priority) {
+        private OrbType(String display, int rangeSquared) {
             this.display = display;
             this.rangeSquared = rangeSquared;
-            this.priority = priority;
         }    
         
          public boolean isInRadius(double distanceSquared) {
@@ -154,25 +186,11 @@ public class AutoFlare extends Feature {
             this.entity = entity;
             this.type = type;
         }
-
-        public boolean isBetterThan(Flare.Type type) {
-            if (this.type.priority < type.priority) {
-                return true;
-            }
-
-            return false;
-        }
         
         private enum Type {
-            SOS(3),
-            ALERT(2),
-            WARNING(1);
-
-            public final int priority;
-            
-            private Type(int priority) {
-                this.priority = priority;
-            }
+            SOS,
+            ALERT,
+            WARNING;
         }
     }
 
