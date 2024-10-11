@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
+import org.skyfish.failsafe.FailsafeManager;
+import org.skyfish.feature.FeatureManager;
 import org.skyfish.handler.*;
 import org.skyfish.util.Config;
 
@@ -25,6 +27,9 @@ public class SkyFish {
     public void init(FMLInitializationEvent event) {
         ClientRegistry.registerKeyBinding(settingsKeybind);
         ClientRegistry.registerKeyBinding(macroKeybind);
+
+        // FailsafeManager.getInstance().initialize();
+        FeatureManager.getInstance().initialize();
 
         GameStateHandler.getInstance().initialize();
         RotationHandler.getInstance().initialize();
