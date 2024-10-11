@@ -9,6 +9,18 @@ public class InventoryUtils {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
+    public static int searchItem(String name) {
+        int slotId = -1;
+
+        for (int slot = 0; slot <= 8; slot++) {
+            ItemStack itemStack = mc.thePlayer.inventory.mainInventory[slot];
+            if (itemStack == null) continue;
+            if (StringUtils.stripControlCodes(itemStack.getDisplayName()).toLowerCase().contains(name.toLowerCase())) slotId = slot;
+        }
+        
+        return slotId;
+    }
+    
     public static boolean isInventoryEmpty(EntityPlayer player) {
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             if (player.inventory.getStackInSlot(i) != null) {
