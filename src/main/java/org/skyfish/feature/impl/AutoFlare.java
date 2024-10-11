@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.skyfish.feature.Feature;
-import org.skyfish.util.LogUtils;
+import org.skyfish.util.*;
 
 import java.util.List;
 import java.util.regex.Matcher;
