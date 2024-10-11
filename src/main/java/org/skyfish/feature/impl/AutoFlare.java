@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 public class AutoFlare extends Feature {
 
     private final Pattern ORB_PATTERN = Pattern.compile("[A-Za-z ]* (?<seconds>[0-9]*)s");
-    private EntityArmorStand flare = null;
+    private Orb orb = null;
+    private Flare flare = null;
     
     public AutoFlare() {
         super("AutoFlare");
@@ -37,21 +38,24 @@ public class AutoFlare extends Feature {
             EntityLivingBase as = (EntityLivingBase) armorstand;
             ItemStack head = as.getEquipmentInSlot(4);
             if (head == null || !head.hasTagCompound()) continue;
-            int type = getFlareType(head);
-            if (type == -1) continue;
-            LogUtils.sendSuccess("Found Flare");
-            if (flare == null || flare.isDead) flare = armorstand;
+            Flare.Type type = getFlareType(head);
+            if (type == null) continue;
+            if (this.flare == null || this.flare.isDead || Flare.isBetterThan(type)) this.flare = new Flare(armorstand, type);
         }
     }
     
-    private int getFlareType(ItemStack head) {
-        String[] flareSkins = new String[] { "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzMwNjIyMywKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjJlMmJmNmMxZWMzMzAyNDc5MjdiYTYzNDc5ZTU4NzJhYzY2YjA2OTAzYzg2YzgyYjUyZGFjOWYxYzk3MTQ1OCIKICAgIH0KICB9Cn0=", "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzMyNjQzMiwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWQyYmY5ODY0NzIwZDg3ZmQwNmI4NGVmYTgwYjc5NWM0OGVkNTM5YjE2NTIzYzNiMWYxOTkwYjQwYzAwM2Y2YiIKICAgIH0KICB9Cn0=", "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzM0NzQ4OSwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzAwNjJjYzk4ZWJkYTcyYTZhNGI4OTc4M2FkY2VmMjgxNWI0ODNhMDFkNzNlYTg3YjNkZjc2MDcyYTg5ZDEzYiIKICAgIH0KICB9Cn0=" };
+    private Flare.Type getFlareType(ItemStack head) {
+        String[] flareSkins = new String[] { "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzMwNjIyMywKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjJlMmJmNmMxZWMzMzAyNDc5MjdiYTYzNDc5ZTU4NzJhYzY2YjA2OTAzYzg2YzgyYjUyZGFjOWYxYzk3MTQ1OCIKICAgIH0KICB9Cn0=", 
+                                            "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzMyNjQzMiwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWQyYmY5ODY0NzIwZDg3ZmQwNmI4NGVmYTgwYjc5NWM0OGVkNTM5YjE2NTIzYzNiMWYxOTkwYjQwYzAwM2Y2YiIKICAgIH0KICB9Cn0=", 
+                                            "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzM0NzQ4OSwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzAwNjJjYzk4ZWJkYTcyYTZhNGI4OTc4M2FkY2VmMjgxNWI0ODNhMDFkNzNlYTg3YjNkZjc2MDcyYTg5ZDEzYiIKICAgIH0KICB9Cn0=" };
         for (int i = 0; i < flareSkins.length; i++) {
             if (head.hasTagCompound() && head.getTagCompound().toString().contains(flareSkins[i])) {
-                return i;
+                if (i == 0) return Flare.Type.WARNING;
+                if (i == 1) return Flare.Type.ALERT;
+                if (i == 2) return Flare.Type.WARNING;
             }
         }
-        return -1;
+        return null;
     }
     
     @SubscribeEvent
@@ -59,34 +63,30 @@ public class AutoFlare extends Feature {
         Entity entity = event.entity;
     
         if (entity instanceof EntityArmorStand && entity.hasCustomName()) {
-            detectOrb((EntityArmorStand) entity);
+            String nameTag = entity.getCustomNameTag();
+            OrbType orb = OrbType.getByName(nameTag);
+            
+            if (orb != null && orb.isInRadius(entity.getDistanceSqToEntity(mc.thePlayer))) { 
+                Matcher matcher = ORB_PATTERN.matcher(StringUtils.stripControlCodes(nameTag));
+    
+                if (matcher.matches()) {
+                    List<EntityArmorStand> surroundingArmorStands = mc.theWorld.getEntitiesWithinAABB(EntityArmorStand.class, new AxisAlignedBB(entity.posX - 0.1, entity.posY - 3, entity.posZ - 0.1, entity.posX + 0.1, entity.posY, entity.posZ + 0.1));
+                    if (!surroundingArmorStands.isEmpty()) {
+                        for (EntityArmorStand surroundingArmorStand : surroundingArmorStands) {
+                            ItemStack helmet = surroundingArmorStand.getCurrentArmor(3);
+                            if (helmet != null) {
+                                if (this.orb == null || this.orb.isDead || this.orb.isBetterThan(orb)) this.orb = new Orb(surroundingArmorStand, orb);
+                            }
+                        }
+                    }
+                }
+            }    
         }
     }
 
     public boolean shouldPlace() {
-        return flare != null && !flare.isDead;
-    }
-    
-    public void detectOrb(EntityArmorStand entity) {
-        String nameTag = entity.getCustomNameTag();
-        Orb orb = Orb.getByName(nameTag);
         
-        if (orb != null && orb.isInRadius(entity.getDistanceSqToEntity(mc.thePlayer))) { 
-            Matcher matcher = ORB_PATTERN.matcher(StringUtils.stripControlCodes(nameTag));
-
-            if (matcher.matches()) {
-                List<EntityArmorStand> surroundingArmorStands = mc.theWorld.getEntitiesWithinAABB(EntityArmorStand.class, new AxisAlignedBB(entity.posX - 0.1, entity.posY - 3, entity.posZ - 0.1, entity.posX + 0.1, entity.posY, entity.posZ + 0.1));
-                if (!surroundingArmorStands.isEmpty()) {
-                    for (EntityArmorStand surroundingArmorStand : surroundingArmorStands) {
-                        ItemStack helmet = surroundingArmorStand.getCurrentArmor(3);
-                        if (helmet != null) {
-                            LogUtils.sendSuccess("Found Orb");
-                            if (flare == null || flare.isDead) flare = surroundingArmorStand;
-                        }
-                    }
-                }
-            }
-        }       
+        return ;
     }
     
     private static AutoFlare instance;
@@ -98,31 +98,81 @@ public class AutoFlare extends Feature {
         return instance;
     }
 
-    public static enum Orb {
-        RADIANT("§aRadiant", 18*18),
-        MANA_FLUX("§9Mana Flux", 18*18),
-        OVERFLUX("§5Overflux", 18*18),
-        PLASMAFLUX("§d§lPlasmaflux", 20*20);
+    private class Orb {
+        public final EntityArmorStand entity;
+        public final OrbType type;
+        
+        public Flare(EntityArmorStand entity, OrbType type) {
+            this.entity = entity;
+            this.type = type;
+        }
+
+        public boolean isBetterThan(OrbType type) {
+            if (this.type.priority < type.priority) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+        
+    private static enum OrbType {
+        RADIANT("§aRadiant", 18*18, 1),
+        MANA_FLUX("§9Mana Flux", 18*18, 2),
+        OVERFLUX("§5Overflux", 18*18, 3),
+        PLASMAFLUX("§d§lPlasmaflux", 20*20, 4);
 
         private String display;
         private int rangeSquared;
+        public final int priority;
         
-        private Orb(String display, int rangeSquared) {
+        private OrbType(String display, int rangeSquared, int priority) {
             this.display = display;
             this.rangeSquared = rangeSquared;
+            this.priority = priority;
         }    
         
          public boolean isInRadius(double distanceSquared) {
             return distanceSquared <= rangeSquared;
         }
 
-        public static Orb getByName(String name) {
-            for (Orb orb : values()) {
+        public static OrbType getByName(String name) {
+            for (OrbType orb : values()) {
                 if (name.startsWith(orb.display)) {
                     return orb;
                 }
             }
             return null;
+        }
+    }
+
+    private class Flare {
+        public final EntityArmorStand entity;
+        public final Flare.Type type;
+        
+        public Flare(EntityArmorStand entity, Flare.Type type) {
+            this.entity = entity;
+            this.type = type;
+        }
+
+        public boolean isBetterThan(Flare.Type type) {
+            if (this.type.priority < type.priority) {
+                return true;
+            }
+
+            return false;
+        }
+        
+        private enum Type {
+            SOS(3),
+            ALERT(2),
+            WARNING(1);
+
+            public final int priority;
+            
+            private Type(int priority) {
+                this.priority = priority;
+            }
         }
     }
 
