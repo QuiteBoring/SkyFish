@@ -1,4 +1,4 @@
-package org.skyfish.failsafe;
+package org.skyfish.feature;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;

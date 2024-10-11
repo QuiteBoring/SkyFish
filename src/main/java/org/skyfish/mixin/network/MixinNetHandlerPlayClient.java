@@ -1,4 +1,4 @@
-package com.skyfish.mixin.network;
+package org.skyfish.mixin.network;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;

@@ -29,6 +29,10 @@ public class Failsafe {
     public void initialize() {
         MinecraftForge.EVENT_BUS.register(this);
     }
+
+    public String getName() {
+        return type.getName();
+    }
     
     public int getPriority() {
         return type.getPriority();
