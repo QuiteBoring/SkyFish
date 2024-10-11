@@ -27,7 +27,7 @@ public class AutoFlare extends Feature {
 
     @Override
     public void onTick() {
-        List<EntityArmorStand> armorstands =  mc.theWorld.loadedEntityList.stream().filter((e) -> e instanceof EntityArmorStand).collect(Collectors.toList());
+        List<EntityArmorStand> armorstands =  mc.theWorld.loadedEntityList.stream().filter((e) -> e instanceof EntityArmorStand).map((e) -> (EntityArmorStand) e).collect(Collectors.toList());
         double playerX = mc.thePlayer.getPosition().getX();
         double playerY = mc.thePlayer.getPosition().getY();
         double playerZ = mc.thePlayer.getPosition().getZ();
