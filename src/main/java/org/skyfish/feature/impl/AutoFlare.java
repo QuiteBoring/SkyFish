@@ -6,6 +6,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.skyfish.feature.Feature;
@@ -58,7 +59,7 @@ public class AutoFlare extends Feature {
                 if (itemStack.getItem() != Items.skull) continue;
                 if (tagCompound == null) continue;
                 if (!tagCompound.hasKey("SkullOwner")) continue;
-                String texture = tagCompound.getCompoundTag("SkullOwner").getCompoundTag("Properties").getTagList("textures", NBTTagCompound.TYPE).getCompoundTagAt(0).getString("Value");
+                String texture = tagCompound.getCompoundTag("SkullOwner").getCompoundTag("Properties").getTagList("textures", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(0).getString("Value");
                 if (texture != null && texture.equals(skin)) return true;
             }
         }
