@@ -16,7 +16,7 @@ public class LogUtils {
     }
 
     public static void sendSuccess(String message) {
-        sendLog(new ChatComponentText("§3§lSkyFish §8» §r" + message));
+        sendLog(new ChatComponentText("§2§lSkyFish §8» §a" + message));
     }
 
     public static void sendError(String message) {
