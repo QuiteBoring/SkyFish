@@ -25,49 +25,50 @@ public class AutoFlare extends Feature {
         super("AutoFlare");
     }
 
+    @Override
+    public void onTick() {
+        List<EntityArmorStand> armorstands =  mc.theWorld.loadedEntityList.stream().map(EntityArmorStand::new).collect(Collectors.toList());
+
+        double playerX = Player.getX();
+        double playerY = Player.getY();
+        double playerZ = Player.getZ();
+
+        for (EntityArmorStand armorstand : armorstands) {
+            double distance = Math.sqrt(Math.pow(armorstand.getPosX() - playerX, 2) + Math.pow(armorstand.getPosY() - playerY, 2) + Math.pow(armorstand.getPosZ() - playerZ, 2));
+            if (distance > 40 || armorstand.ticksExisted > 3600) continue;
+            EntityLivingBase as = (EntityLivingBase) armorstand;
+            ItemStack head = as.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+            if (head.isEmpty()) {
+                continue;
+            }
+            int type = getFlareType(head);
+
+            if (type == -1) {
+                continue;
+            }
+        }
+    }
+    
+    private int getFlareType(ItemStack head) {
+        for (int i = 0; i < Flare.length; i++) {
+            if (head.hasTagCompound() && head.getTagCompound().toString().contains(Flare[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
         Entity entity = event.entity;
     
         if (entity instanceof EntityArmorStand && entity.hasCustomName()) {
             detectOrb((EntityArmorStand) entity);
-
-            // if (flare == null || flare.isDead) {
-            //     detectFlare((EntityArmorStand) entity);
-            // }
         }
     }
 
     public boolean shouldPlace() {
         return flare != null && !flare.isDead;
-    }
-    
-    public void detectFlare(EntityArmorStand entity) {
-        if (entity.ticksExisted > 3600) return;
-        String[] flareSkins = new String[] { "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzMwNjIyMywKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjJlMmJmNmMxZWMzMzAyNDc5MjdiYTYzNDc5ZTU4NzJhYzY2YjA2OTAzYzg2YzgyYjUyZGFjOWYxYzk3MTQ1OCIKICAgIH0KICB9Cn0=", "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzMyNjQzMiwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWQyYmY5ODY0NzIwZDg3ZmQwNmI4NGVmYTgwYjc5NWM0OGVkNTM5YjE2NTIzYzNiMWYxOTkwYjQwYzAwM2Y2YiIKICAgIH0KICB9Cn0=", "ewogICJ0aW1lc3RhbXAiIDogMTY0NjY4NzM0NzQ4OSwKICAicHJvZmlsZUlkIiA6ICI0MWQzYWJjMmQ3NDk0MDBjOTA5MGQ1NDM0ZDAzODMxYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJNZWdha2xvb24iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzAwNjJjYzk4ZWJkYTcyYTZhNGI4OTc4M2FkY2VmMjgxNWI0ODNhMDFkNzNlYTg3YjNkZjc2MDcyYTg5ZDEzYiIKICAgIH0KICB9Cn0=" };
-        for (String flareSkin : flareSkins) {
-            if (hasSkullTexture(entity, flareSkin)) {
-                flare = entity;
-            }
-        }
-    }
-
-    private boolean hasSkullTexture(EntityArmorStand entity, String skin) {
-        ItemStack[] inventory = entity.getInventory();
-        
-        if (inventory != null) {
-            NBTTagCompound tagCompound = entity.getNBTTagCompound();
-            
-            for (ItemStack itemStack : inventory) {
-                if (itemStack.getItem() != Items.skull) continue;
-                if (tagCompound == null) continue;
-                if (!tagCompound.hasKey("SkullOwner")) continue;
-                String texture = tagCompound.getCompoundTag("SkullOwner").getCompoundTag("Properties").getTagList("textures", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(0).getString("Value");
-                if (texture != null && texture.equals(skin)) return true;
-            }
-        }
-
-        return false;
     }
     
     public void detectOrb(EntityArmorStand entity) {
