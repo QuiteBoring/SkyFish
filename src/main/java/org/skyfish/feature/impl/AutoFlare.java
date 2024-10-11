@@ -28,13 +28,11 @@ public class AutoFlare extends Feature {
     @Override
     public void onTick() {
         List<EntityArmorStand> armorstands =  mc.theWorld.loadedEntityList.stream().map(EntityArmorStand::new).collect(Collectors.toList());
-
-        double playerX = Player.getX();
-        double playerY = Player.getY();
-        double playerZ = Player.getZ();
-
+        double playerX = mc.thePlayer.getPosition().getX();
+        double playerY = mc.thePlayer.getPosition().getY();
+        double playerZ = mc.thePlayer.getPosition().getZ();
         for (EntityArmorStand armorstand : armorstands) {
-            double distance = Math.sqrt(Math.pow(armorstand.getPosX() - playerX, 2) + Math.pow(armorstand.getPosY() - playerY, 2) + Math.pow(armorstand.getPosZ() - playerZ, 2));
+            double distance = Math.sqrt(Math.pow(armorstand.getPosition().getX() - playerX, 2) + Math.pow(armorstand.getPosition().getY() - playerY, 2) + Math.pow(armorstand.getPosition().getZ() - playerZ, 2));
             if (distance > 40 || armorstand.ticksExisted > 3600) continue;
             EntityLivingBase as = (EntityLivingBase) armorstand;
             ItemStack head = as.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
