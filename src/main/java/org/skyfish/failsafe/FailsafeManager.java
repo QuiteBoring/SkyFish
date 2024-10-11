@@ -47,16 +47,16 @@ public class FailsafeManager {
             checkTimer.reset();
             
             if (Config.getInstance().FAILSAFE_PLAY_SOUND) {
-                try {
-                    Multithreading.runAsync(() -> {
+                Multithreading.runAsync(() -> {
+                    try {
                         float prevSound = mc.gameSettings.getSoundLevel(SoundCategory.MASTER);
                         mc.gameSettings.setSoundLevel(SoundCategory.MASTER, 100.0F);
                         Thread.sleep(1000);
                         mc.theWorld.playSound(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, "random.anvil_land", 10.0F, 1.0F, false);
                         Thread.sleep(1000);
                         mc.gameSettings.setSoundLevel(SoundCategory.MASTER, prevSound);
-                    });
-                } catch (Exception ignored) {}
+                    } catch (Exception ignored) {}
+                });
             }
         }
         
