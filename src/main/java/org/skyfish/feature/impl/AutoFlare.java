@@ -30,7 +30,7 @@ public class AutoFlare extends Feature {
         Entity entity = event.entity;
     
         if (entity instanceof EntityArmorStand && entity.hasCustomName()) {
-            detectOrb((EntityArmorStand) entity);
+            // detectOrb((EntityArmorStand) entity);
 
             if (flare == null || flare.isDead) {
                 detectFlare((EntityArmorStand) entity);
