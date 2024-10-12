@@ -8,7 +8,7 @@ import net.minecraft.network.play.server.*;
 import net.minecraft.scoreboard.*;
 import net.minecraft.util.*;
 import net.minecraftforge.common.MinecraftForge;
-import org.skyfish.event.*;
+import org.skyfish.event.impl.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

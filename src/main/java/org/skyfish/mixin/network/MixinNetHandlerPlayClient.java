@@ -7,7 +7,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.network.play.server.*;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.MinecraftForge;
-import org.skyfish.event.*;
+import org.skyfish.event.impl.*;
 import org.skyfish.util.TablistUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
