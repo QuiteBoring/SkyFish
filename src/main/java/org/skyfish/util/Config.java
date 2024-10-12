@@ -36,7 +36,16 @@ public class Config extends Vigilant {
     )
     public boolean AUTO_KILL_BARN_FISHING = true;
 
-
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "Mob Limit",
+            description = "When to start killing mobs",
+            category = "Auto Kill",
+            subcategory = "Barn Fishing",
+            min = 0,
+            max = 20
+    )
+    public int AUTO_KILL_MOB_LIMIT = 7;  
     
     @Property(
             type = PropertyType.SWITCH,
@@ -109,9 +118,49 @@ public class Config extends Vigilant {
     )
     public boolean FEATURE_ANTI_AFK = false;
 
+    // region Delay
+
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "Swap Slot (ms)",
+            description = "Delay when swapping slots",
+            category = "Delays",
+            min = 0,
+            max = 500
+    )
+    public int DELAYS_SWAP_SLOT = 100;  
+
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "Recast (ms)",
+            description = "Delay when recasting",
+            category = "Delays",
+            min = 0,
+            max = 500
+    )
+    public int DELAYS_RECAST = 100;  
+
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "CPS",
+            description = "Hypes at the rate of which you click",
+            category = "Delays",
+            min = 5,
+            max = 20
+    )
+    public int DELAYS_CPS = 10;  
+
     public Config() {
         super(new File("./config/SkyFish.toml"));
         initialize();
+    }
+
+    public int getDelay() {
+        return getDelay((1000 / DELAYS_CPS) - 50);
+    }
+
+    public int getDelay(int inital) {
+        return inital + (int) (Math.random() * 20) + 1;
     }
 
     private static Config instance;    

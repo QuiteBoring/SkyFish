@@ -45,21 +45,21 @@ public class FeatureManager {
         if (mc.theWorld == null || mc.thePlayer == null) return;
 
         features.forEach((feature) -> {
-            if (feature.isRunning() && !MacroHandler.getInstance().isPaused()) feature.onTick();
+            if (MacroHandler.getInstance().isEnabled() && !MacroHandler.getInstance().isPaused()) feature.onTick();
         });
     }
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
         features.forEach((feature) -> {
-            if (feature.isRunning() && !MacroHandler.getInstance().isPaused()) feature.onChat(event);
+            if (MacroHandler.getInstance().isEnabled() && !MacroHandler.getInstance().isPaused()) feature.onChat(event);
         });
     }
 
     @SubscribeEvent
     public void onPacketReceive(PacketReceiveEvent event) {
         features.forEach((feature) -> {
-            if (feature.isRunning() && !MacroHandler.getInstance().isPaused()) feature.onPacketReceive(event);
+            if (MacroHandler.getInstance().isEnabled() && !MacroHandler.getInstance().isPaused()) feature.onPacketReceive(event);
         });
     }
     

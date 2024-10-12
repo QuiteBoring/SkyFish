@@ -65,6 +65,11 @@ public class FailsafeManager {
         }
     }
 
+    public void clear() {
+        emergencyQueue.clear();
+        triggeredFailsafe = Optional.empty();
+    }
+
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
         failsafes.forEach((failsafe) -> failsafe.onChat(event));

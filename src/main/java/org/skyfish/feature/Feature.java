@@ -10,20 +10,13 @@ public class Feature {
 
     protected final Minecraft mc = Minecraft.getMinecraft();
     private final String name;
-    private boolean running;
   
     public Feature(String name) {
         this.name = name;
-        this.running = false;
     }
 
-    public void start() {
-        running = true;
-    }
-
-    public void stop() {
-        running = false;
-    }
+    public void start() {}
+    public void stop() {}
 
     public void onTick() {}
     public void onChat(ClientChatReceivedEvent event) {}
@@ -35,10 +28,6 @@ public class Feature {
 
     public String getName() {
         return name;
-    }
-  
-    public boolean isRunning() {
-        return running;
     }
 
 }

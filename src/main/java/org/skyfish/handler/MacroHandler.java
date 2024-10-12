@@ -5,6 +5,7 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.skyfish.failsafe.FailsafeManager;
 import org.skyfish.feature.FeatureManager;
 import org.skyfish.util.LogUtils;
 import org.skyfish.util.helper.Rotation;
@@ -49,6 +50,7 @@ public class MacroHandler {
     }
 
     public void onDisable() {
+        FailsafeManager.getInstance().clear();
         mainLookAtBlock = null;
         setStep(Step.NONE);
         LogUtils.sendSuccess("Macro Disabled");
@@ -106,7 +108,13 @@ public class MacroHandler {
         FIND_ROD,
         THROW_ROD,
         WAIT_FOR_CATCH,
-        CATCH;
+        CATCH,
+        FIND_WEAPON,
+        ROTATE_DOWN,
+        KILL,
+        ROTATE_BACK,
+        PLACE_FLARE,
+        PLACE_TOTEM;
     }
 
     private static MacroHandler instance;
