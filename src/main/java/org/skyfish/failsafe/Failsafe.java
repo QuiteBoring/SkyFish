@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import org.skyfish.event.PacketReceiveEvent;
+import org.skyfish.event.PacketEvent;
 
 public class Failsafe {
 
@@ -23,7 +23,7 @@ public class Failsafe {
     
     public void onTick() {}
     public void onChat(ClientChatReceivedEvent event) {}
-    public void onPacketReceive(PacketReceiveEvent event) {}
+    public void onPacketReceive(PacketEvent.Receive event) {}
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {}
 
     public void initialize() {
