@@ -57,7 +57,7 @@ public class FeatureManager {
     }
 
     @SubscribeEvent
-    public void onPacketReceive(PacketReceiveEvent event) {
+    public void onPacketReceive(PacketEvent.Receive event) {
         features.forEach((feature) -> {
             if (MacroHandler.getInstance().isEnabled() && !MacroHandler.getInstance().isPaused()) feature.onPacketReceive(event);
         });
