@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.skyfish.event.*;
+import org.skyfish.event.impl.*;
 import org.skyfish.util.*;
 
 import java.awt.*;

@@ -4,9 +4,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.network.play.server.*;
 import net.minecraft.util.*;
-import org.skyfish.event.PacketEvent;
+import org.skyfish.event.impl.PacketEvent;
 import org.skyfish.feature.Feature;
 import org.skyfish.handler.*;
+import org.skyfish.mixin.entity.EntityFishHookAccessor;
 import org.skyfish.util.Timer;
 import org.skyfish.util.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,8 +49,6 @@ public class FishingMacro extends Feature {
 
     @Override
     public void onPacketReceive(PacketEvent.Receive event) {
-        if (mc.theWorld == null || mc.thePlayer == null) return;
-        
         if (event.packet instanceof S14PacketEntity.S17PacketEntityLookMove) {
             Entity entity = ((S14PacketEntity.S17PacketEntityLookMove) event.packet).getEntity(mc.theWorld);
             if (!(entity instanceof EntityFishHook) || ((EntityFishHook) entity).angler != mc.thePlayer) return;
@@ -137,7 +136,7 @@ public class FishingMacro extends Feature {
         if (mc.thePlayer == null) return;
 
         if (onGroundTimer.hasElaspedOnce(2000)) {
-            if (fishingHook != null && (fishingHook.onGround || fishingHook.caughtEntity != null)) {
+            if (fishingHook != null && (fishingHook.onGround || ((EntityFishHookAccessor) fishingHook).getInGround() || fishingHook.caughtEntity != null)) {
                 if (mc.thePlayer.fishEntity != null) KeybindUtils.rightClick();
                 LogUtils.sendError("Recasting due to problem (On ground, in ground, or hooked entity)...");
                 MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD);;

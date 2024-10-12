@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import org.skyfish.event.PacketEvent;
+import org.skyfish.event.impl.PacketEvent;
 
 public class Failsafe {
 

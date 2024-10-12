@@ -6,7 +6,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import org.skyfish.event.PacketEvent;
+import org.skyfish.event.impl.PacketEvent;
 import org.skyfish.util.*;
 
 import java.util.ArrayList;
