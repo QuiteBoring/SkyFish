@@ -147,7 +147,8 @@ public class AutoFlare extends Feature {
                     if (!surroundingArmorStands.isEmpty()) {
                         for (EntityArmorStand surroundingArmorStand : surroundingArmorStands) {
                             ItemStack helmet = surroundingArmorStand.getCurrentArmor(3);
-                            if (helmet != null && (this.flare == null || this.flare.entity.isDead) && flare.type == getTypeHotbar()) {
+                            if (helmet != null) {
+                                if (this.flare == null || (this.flare.type == getTypeHotbar())) continue;
                                 this.flare = new Flare(surroundingArmorStand, orb);
                             }
                         }
