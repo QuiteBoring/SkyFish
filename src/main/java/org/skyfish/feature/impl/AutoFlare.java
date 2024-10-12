@@ -1,14 +1,18 @@
 package org.skyfish.feature.impl;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.skyfish.feature.Feature;
+import org.skyfish.handler.RotationHandler;
+import org.skyfish.util.Timer;
 import org.skyfish.util.*;
 
 import java.util.List;
@@ -20,7 +24,7 @@ public class AutoFlare extends Feature {
 
     private final Pattern ORB_PATTERN = Pattern.compile("[A-Za-z ]* (?<seconds>[0-9]*)s");
     private Flare flare = null;
-    private boolean running = false;
+    private Timer timer = new Timer();
     
     public AutoFlare() {
         super("AutoFlare");
@@ -29,37 +33,70 @@ public class AutoFlare extends Feature {
     @Override
     public void start() {
         flare = null;
-        running = false;
+        timer.reset();
     }
 
     @Override 
     public void stop() {
         flare = null;
-        running = false;
+        timer.reset();
     }
 
     public void placeFlare(Runnable runnable) {
-        if (flare != null || !flare.isDead || !Config.getInstance().FEATURE_AUTO_FLARE || running) return;
-        running = true;
-        
+        if (flare != null || !flare.entity.isDead || !Config.getInstance().FEATURE_AUTO_FLARE || !timer.hasElasped(5000)) return;
+        timer.reset();
+
         Multithreading.runAsync(() -> {
             try {
-                int slot = InventoryUtils.searchItem("Flare") == -1 ? InventoryUtils.searchItem("Flux") : InventoryUtils.searchItem("Flare");
+                int slot = InventoryUtils.searchItem("Flare") == -1 ? InventoryUtils.searchItem("Orb") : InventoryUtils.searchItem("Flare");
 
                 if (slot == -1) {
-                    LogUtils.sendDebug("No flux or flare found in hotbar");
+                    LogUtils.sendError("No flux or flare found in hotbar");
                 } else {
-                    Thread.sleep(Config.getInstance().getDelay());
-                    mc.thePlayer.inventory.currentItem = slot;
-                    Thread.sleep(100);        
-                    mc.playerController.sendUseItem(mc.thePlayer, mc.theWorld, mc.thePlayer.heldItem);
-                    Thread.sleep(100);
+                    if (!Config.getInstance().AUTO_KILL_HYPE_FISHING && InventoryUtils.searchItem("Orb") != -1) {
+                        BlockPos block = findProperBlock();
+                        if (block != null) {
+                            RotationHandler.getInstance().easeToBlock(block, 500L);
+                            Thread.sleep(750);
+                            mc.thePlayer.inventory.currentItem = slot;
+                            Thread.sleep(100);        
+                            KeybindUtils.rightClick();
+                            Thread.sleep(100);
+                        }
+                    } else {
+                        Thread.sleep(250);
+                        mc.thePlayer.inventory.currentItem = slot;
+                        Thread.sleep(100);        
+                        KeybindUtils.rightClick();
+                        Thread.sleep(100);
+                    }
                 }
             } catch (Exception error) {}
             runnable.run();
-            running = false;
+            timer.reset();
         });
     }
+
+    public BlockPos findProperBlock() {
+        for (int offsetX = -2; offsetX <= 2; offsetX++) {
+            for (int offsetZ = -2; offsetZ <= 2; offsetZ++) {
+                if (offsetX == 0 && offsetZ == 0) continue;
+                BlockPos blockPos = new BlockPos(
+                    mc.thePlayer.posX + offsetX,
+                    mc.thePlayer.posY - 1,
+                    mc.thePlayer.posZ + offsetZ
+                );
+                Block blockAtBlockPos = mc.theWorld.getChunkFromBlockCoords(blockPos).getBlock(blockPos);
+                Block blockOverBlockPos = mc.theWorld.getChunkFromBlockCoords(blockPos).getBlock(blockPos.add(0, 1, 0));
+                if (blockAtBlockPos != Blocks.air && blockAtBlockPos != Blocks.water && 
+                    blockAtBlockPos != Blocks.flowing_water && blockAtBlockPos != Blocks.lava && 
+                    blockAtBlockPos != Blocks.flowing_lava && blockOverBlockPos == Blocks.air) {
+                    return blockPos;
+                }
+            }
+        }
+        return null;
+    }    
 
     @Override
     public void onTick() {
@@ -74,7 +111,7 @@ public class AutoFlare extends Feature {
             ItemStack head = as.getEquipmentInSlot(4);
             if (head == null || !head.hasTagCompound()) continue;
             Type type = getFlareType(head);
-            if (type == null || this.flare != null || !this.flare.isDead) continue;
+            if (type == null || this.flare != null || !this.flare.entity.isDead) continue;
             if (type == getTypeHotbar()) this.flare = new Flare(armorstand, type);
         }
     }
@@ -110,7 +147,7 @@ public class AutoFlare extends Feature {
                     if (!surroundingArmorStands.isEmpty()) {
                         for (EntityArmorStand surroundingArmorStand : surroundingArmorStands) {
                             ItemStack helmet = surroundingArmorStand.getCurrentArmor(3);
-                            if (helmet != null && (this.flare == null || this.flare.isDead) && flare == getTypeHotbar()) {
+                            if (helmet != null && (this.flare == null || this.flare.entity.isDead) && flare.type == getTypeHotbar()) {
                                 this.flare = new Flare(surroundingArmorStand, orb);
                             }
                         }
@@ -137,7 +174,7 @@ public class AutoFlare extends Feature {
             if (name.contains("warning")) type = Type.WARNING;
         } 
 
-        return orbType;
+        return type;
     }
     
     private static AutoFlare instance;
@@ -165,8 +202,8 @@ public class AutoFlare extends Feature {
         OVERFLUX("§5Overflux", 18*18),
         PLASMAFLUX("§d§lPlasmaflux", 20*20),
         SOS("SOS", -1),
-        Alert("Alert", -1),
-        Warning("Warning", -1);
+        ALERT("Alert", -1),
+        WARNING("Warning", -1);
 
         private String display;
         private int rangeSquared;
