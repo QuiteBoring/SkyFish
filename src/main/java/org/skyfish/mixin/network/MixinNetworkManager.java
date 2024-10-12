@@ -29,7 +29,7 @@ public class MixinNetworkManager {
     private void read(ChannelHandlerContext context, Packet<?> packet, CallbackInfo callback) {
         if (packet.getClass().getSimpleName().startsWith("S")) {
             MinecraftForge.EVENT_BUS.register(new PacketReceiveEvent(packet));
-        } 
+        }
 
         if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
         if (packet instanceof S3DPacketDisplayScoreboard || packet instanceof S3CPacketUpdateScore || packet instanceof S3DPacketDisplayScoreboard || packet instanceof S3EPacketTeams) {
