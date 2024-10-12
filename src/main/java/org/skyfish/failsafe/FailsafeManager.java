@@ -6,7 +6,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import org.skyfish.event.PacketReceiveEvent;
+import org.skyfish.event.PacketEvent;
 import org.skyfish.util.*;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class FailsafeManager {
     }
 
     @SubscribeEvent
-    public void onPacketReceive(PacketReceiveEvent event) {
+    public void onPacketReceive(PacketEvent.Receive event) {
         failsafes.forEach((failsafe) -> failsafe.onPacketReceive(event));
     }
 
