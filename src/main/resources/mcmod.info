@@ -2,10 +2,10 @@
   {
     "modid": "${modid}",
     "name": "SkyFish",
-    "description": "A QOL fishing mod for Hypixel Skyblock",
+    "description": "A QOL fishing mod for Hypixel Skyblock.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://github.com/romangraef/Forge1.8.9Template/",
+    "url": "",
     "updateUrl": "",
     "authorList": [],
     "credits": "",
