@@ -28,9 +28,9 @@ public class MixinNetworkManager {
     @Inject(method = "channelRead0*", at = @At("HEAD"))
     private void read(ChannelHandlerContext context, Packet<?> packet, CallbackInfo callback) {
         if (packet.getClass().getSimpleName().startsWith("S")) {
-            new PacketEvent.Receive(packet).post();
+            MinecraftForge.EVENT_BUS.register(new PacketEvent.Receive(packet));
         } else if (packet.getClass().getSimpleName().startsWith("C")) {
-            new PacketEvent.Send(packet).post();
+            MinecraftForge.EVENT_BUS.register(new PacketEvent.Send(packet));
         }
 
         if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
@@ -51,7 +51,7 @@ public class MixinNetworkManager {
                 String clean = skyfish$cleanSB(string);
                 if (!clean.equals(skyfish$cachedScoreboard.get(index)) || !skyfish$cachedScoreboard.containsKey(index)) {
                     skyfish$cachedScoreboard.put(index, clean);
-                    new UpdateScoreboardEvent(clean).post();
+                    MinecraftForge.EVENT_BUS.register(new UpdateScoreboardEvent(clean));
                 }
                 index++;
                 if (index > 15) break;
