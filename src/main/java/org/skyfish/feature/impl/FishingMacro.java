@@ -49,18 +49,20 @@ public class FishingMacro extends Feature {
 
     @Override
     public void onPacketReceive(PacketEvent.Receive event) {
-        if (event.getPacket() instanceof S14PacketEntity.S17PacketEntityLookMove) {
-            Entity entity = ((S14PacketEntity.S17PacketEntityLookMove) event.getPacket()).getEntity(mc.theWorld);
+        if (mc.theWorld == null || mc.thePlayer == null) return;
+        
+        if (event.packet instanceof S14PacketEntity.S17PacketEntityLookMove) {
+            Entity entity = ((S14PacketEntity.S17PacketEntityLookMove) event.packet).getEntity(mc.theWorld);
             if (!(entity instanceof EntityFishHook) || ((EntityFishHook) entity).angler != mc.thePlayer) return;
             fishingHook = (EntityFishHook) entity;
         }
 
-        if (event.getPacket() instanceof S2APacketParticles) {
+        if (event.packet instanceof S2APacketParticles) {
             if (fishingHook == null) return;
-            if (((S2APacketParticles) event.getPacket()).getParticleType() != EnumParticleTypes.WATER_WAKE && ((S2APacketParticles) event.getPacket()).getParticleType() != EnumParticleTypes.FLAME) return;
-            if (((S2APacketParticles) event.getPacket()).getParticleCount() != 6 || ((S2APacketParticles) event.getPacket()).getParticleSpeed() != 0.2f) return;
-            double particlePosX = ((S2APacketParticles) event.getPacket()).getXCoordinate();
-            double particlePosZ = ((S2APacketParticles) event.getPacket()).getZCoordinate();
+            if (((S2APacketParticles) event.packet).getParticleType() != EnumParticleTypes.WATER_WAKE && ((S2APacketParticles) event.packet).getParticleType() != EnumParticleTypes.FLAME) return;
+            if (((S2APacketParticles) event.packet).getParticleCount() != 6 || ((S2APacketParticles) event.packet).getParticleSpeed() != 0.2f) return;
+            double particlePosX = ((S2APacketParticles) event.packet).getXCoordinate();
+            double particlePosZ = ((S2APacketParticles) event.packet).getZCoordinate();
             if (fishingHook.getDistance(particlePosX, fishingHook.posY, particlePosZ) < 0.1) {
                 MacroHandler.getInstance().setStep(MacroHandler.Step.CATCH);
             }
