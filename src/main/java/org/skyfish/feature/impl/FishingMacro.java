@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.network.play.server.*;
 import net.minecraft.util.*;
-import org.skyfish.event.PacketReceiveEvent;
+import org.skyfish.event.PacketEvent;
 import org.skyfish.feature.Feature;
 import org.skyfish.handler.*;
 import org.skyfish.mixin.entity.EntityFishHookAccessor;
@@ -48,7 +48,7 @@ public class FishingMacro extends Feature {
     private EntityFishHook fishingHook = null;
 
     @Override
-    public void onPacketReceive(PacketReceiveEvent event) {
+    public void onPacketReceive(PacketEvent.Receive event) {
         if (event.getPacket() instanceof S14PacketEntity.S17PacketEntityLookMove) {
             Entity entity = ((S14PacketEntity.S17PacketEntityLookMove) event.getPacket()).getEntity(mc.theWorld);
             if (!(entity instanceof EntityFishHook) || ((EntityFishHook) entity).angler != mc.thePlayer) return;
