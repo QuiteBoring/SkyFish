@@ -1,6 +1,6 @@
-package org.skyfish.event;
+package org.skyfish.event.impl;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import org.skyfish.event.Event;
 
 import java.util.List;
 

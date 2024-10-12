@@ -1,8 +1,8 @@
-package org.skyfish.event;
+package org.skyfish.event.impl;
 
 import net.minecraft.network.Packet;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import org.skyfish.event.Event;
 
 public class PacketEvent extends Event {
 
@@ -22,11 +22,6 @@ public class PacketEvent extends Event {
         public Send(final Packet<?> packet) {
             super(packet);
         }
-    }
-
-    public boolean post() {
-        MinecraftForge.EVENT_BUS.post(this);
-        return isCancelable() && isCanceled();
     }
     
 }

@@ -39,8 +39,7 @@ public class MixinNetHandlerPlayClient {
         if (tablist.equals(skyfish$previousTablist)) return;
         skyfish$previousTablist.clear();
         skyfish$previousTablist.addAll(tablist);
-
-        MinecraftForge.EVENT_BUS.register(new UpdateTablistEvent(tablist, System.currentTimeMillis()));
+        new UpdateTablistEvent(tablist, System.currentTimeMillis()).post();
     }
 
     @Inject(method = "handlePlayerListHeaderFooter", at = @At("RETURN"))
@@ -53,7 +52,7 @@ public class MixinNetHandlerPlayClient {
         if (footer.equals(skyfish$previousFooter)) return;
         skyfish$previousFooter.clear();
         skyfish$previousFooter.addAll(footer);
-        MinecraftForge.EVENT_BUS.register(new UpdateTablistFooterEvent(footer));
+        new UpdateTablistFooterEvent(footer).post();
     }
     
 }
