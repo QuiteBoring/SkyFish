@@ -25,6 +25,7 @@ public class FishingMacro extends Feature {
 
     @Override
     public void start() {   
+        shouldCast = mc.thePlayer.fishEntity == null;
         rodSlot = -1;
         startingLocation = GameStateHandler.getInstance().getLocation();
         fishingHook = null;
@@ -35,6 +36,7 @@ public class FishingMacro extends Feature {
 
     @Override
     public void stop() {
+        shouldCast = false;
         rodSlot = -1;
         startingLocation = null;
         fishingHook = null;
@@ -45,6 +47,7 @@ public class FishingMacro extends Feature {
 
     public GameStateHandler.Location startingLocation = GameStateHandler.Location.CRIMSON_ISLE;
     public int rodSlot = -1;
+    privat boolean shouldCast = false;
     private EntityFishHook fishingHook = null;
 
     @Override
@@ -100,7 +103,8 @@ public class FishingMacro extends Feature {
 
             case THROW_ROD: {
                 if (delayTimer.hasElasped(Config.getInstance().getDelay(Config.getInstance().DELAYS_RECAST))) {
-                    if (mc.thePlayer.fishEntity == null) KeybindUtils.rightClick();
+                    if (shouldCast) KeybindUtils.rightClick();
+                    shouldCast = true;
                     lastTimeReeled.reset();
                     MacroHandler.getInstance().setStep(MacroHandler.Step.WAIT_FOR_CATCH);
                 }
