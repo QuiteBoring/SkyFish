@@ -20,7 +20,7 @@ public class Feature {
 
     public void onTick() {}
     public void onChat(ClientChatReceivedEvent event) {}
-    public void onPacketReceive(PacketReceiveEvent event) {}
+    public void onPacketReceive(PacketEvent.Receive event) {}
 
     public void initialize() {
         MinecraftForge.EVENT_BUS.register(this);
