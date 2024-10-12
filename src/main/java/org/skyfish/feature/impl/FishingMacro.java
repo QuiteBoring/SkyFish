@@ -7,7 +7,6 @@ import net.minecraft.util.*;
 import org.skyfish.event.PacketEvent;
 import org.skyfish.feature.Feature;
 import org.skyfish.handler.*;
-import org.skyfish.mixin.entity.EntityFishHookAccessor;
 import org.skyfish.util.Timer;
 import org.skyfish.util.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -138,7 +137,7 @@ public class FishingMacro extends Feature {
         if (mc.thePlayer == null) return;
 
         if (onGroundTimer.hasElaspedOnce(2000)) {
-            if (fishingHook != null && (fishingHook.onGround || ((EntityFishHookAccessor) fishingHook).getInGround() || fishingHook.caughtEntity != null)) {
+            if (fishingHook != null && (fishingHook.onGround || fishingHook.caughtEntity != null)) {
                 if (mc.thePlayer.fishEntity != null) KeybindUtils.rightClick();
                 LogUtils.sendError("Recasting due to problem (On ground, in ground, or hooked entity)...");
                 MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD);;
