@@ -7,7 +7,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import org.skyfish.event.PacketReceiveEvent;
+import org.skyfish.event.PacketEvent;
 import org.skyfish.feature.impl.*;
 import org.skyfish.handler.MacroHandler;
 import org.skyfish.util.*;
