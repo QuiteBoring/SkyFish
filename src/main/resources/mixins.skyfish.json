@@ -6,7 +6,6 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "entity.EntityFishHookAccessor",
     "fml.MixinModList",
     "network.MixinNetworkManager",
     "network.MixinNetHandlerPlayClient",
