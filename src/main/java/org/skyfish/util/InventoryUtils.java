@@ -21,6 +21,21 @@ public class InventoryUtils {
         return slotId;
     }
     
+    public static int searchItems(String[] names) {
+        int slotId = -1;
+
+        for (String name : names) {
+            int slot = searchItem(name);
+
+            if (slot != -1) {
+                slotId = slot;
+                break;
+            }
+        }
+        
+        return slotId;
+    }
+
     public static boolean isInventoryEmpty(EntityPlayer player) {
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             if (player.inventory.getStackInSlot(i) != null) {

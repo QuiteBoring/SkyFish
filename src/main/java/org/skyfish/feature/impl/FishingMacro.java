@@ -9,6 +9,7 @@ import org.skyfish.feature.Feature;
 import org.skyfish.handler.*;
 import org.skyfish.mixin.entity.EntityFishHookAccessor;
 import org.skyfish.util.Timer;
+import org.skyfish.util.helper.Rotation;
 import org.skyfish.util.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -24,7 +25,8 @@ public class FishingMacro extends Feature {
     }
 
     @Override
-    public void start() {   
+    public void start() { 
+        startedRotating = false;  
         shouldCast = mc.thePlayer.fishEntity == null;
         rodSlot = -1;
         startingLocation = GameStateHandler.getInstance().getLocation();
@@ -36,6 +38,7 @@ public class FishingMacro extends Feature {
 
     @Override
     public void stop() {
+        startedRotating = false;
         shouldCast = false;
         rodSlot = -1;
         startingLocation = null;
@@ -47,7 +50,9 @@ public class FishingMacro extends Feature {
 
     public GameStateHandler.Location startingLocation = GameStateHandler.Location.CRIMSON_ISLE;
     public int rodSlot = -1;
-    privat boolean shouldCast = false;
+    public int weaponSlot = -1;
+    private boolean shouldCast = false;
+    private boolean startedRotating = false;
     private EntityFishHook fishingHook = null;
 
     @Override
@@ -131,9 +136,57 @@ public class FishingMacro extends Feature {
 
                 return;
             }
+
+            case FIND_WEAPON: {
+                if (delayTimer.hasElasped(Config.getInstance().getDelay(Config.getInstance().DELAYS_SWAP_SLOT))) {
+                    if (weaponSlot == -1) {
+                        int slot = InventoryUtils.searchItems(Config.getInstance().getWeapon());
+
+                        if (slot == -1) {
+                            MacroHandler.getInstance().setEnabled(false);
+                            LogUtils.sendError("No weapon found in hotbar!");
+                            return;
+                        }
+
+                        weaponSlot = slot;
+                    } 
+
+                    this.mc.thePlayer.inventory.currentItem = weaponSlot;
+                    MacroHandler.getInstance().setStep((Config.getInstance().AUTO_KILL_HYPE_FISHING || Config.getInstance().getWeapon()[0].contains("Fire Veil")) ? MacroHandler.Step.KILL : MacroHandler.Step.ROTATE_DOWN);
+                }
+
+                return;
+            }
+
+            case ROTATE_DOWN: {
+                if (!startedRotating) {
+                    SkyFish.Rotation.easeTo(mc.thePlayer.rotationYaw, 90F, 200);
+                    startedRotating = true;
+                }
+
+                if (!SkyFish.Rotation.isDone()) return;
+                if (mc.thePlayer.rotationPitch != 90F) {
+                    startedRotating = false;
+                } else {
+                    startedRotating = false;
+                    MacroHandler.getInstance().setStep(MacroHandler.Step.KILL);
+                }
+            }
+
+
+            case ROTATE_BACK: {
+                if (!startedRotating) {
+                    Rotation data = MacroHandler.getInstance().getAngle();
+                    SkyFish.Rotation.easeTo(data.getYaw(), data.getPitch(), 200);
+                    startedRotating = true;
+                }
+
+                if (!SkyFish.Rotation.isDone()) return;
+                startedRotating = false;
+                MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD);
+            }
         }
     }
-
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {

@@ -112,9 +112,7 @@ public class MacroHandler {
         FIND_WEAPON,
         ROTATE_DOWN,
         KILL,
-        ROTATE_BACK,
-        PLACE_FLARE,
-        PLACE_TOTEM;
+        ROTATE_BACK;
     }
 
     private static MacroHandler instance;

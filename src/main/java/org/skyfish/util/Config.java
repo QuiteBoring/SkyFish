@@ -15,15 +15,24 @@ public class Config extends Vigilant {
             type = PropertyType.SWITCH,
             name = "AutoKill",
             description = "Enable feature to automatically kill mobs spawned",
-            category = "AutoKill"
+            category = "Auto Kill"
     )
     public boolean AUTO_KILL = true; 
+
+    @Property(
+            type = PropertyType.SELECTOR,
+            name = "Weapon",
+            description = "Select which weapon to use",
+            options = { "Wither Blade", "Fire Veil" },
+            category = "Auto Kill"
+    )
+    public int AUTO_KILL_WEAPON = 0;
 
     @Property(
             type = PropertyType.SWITCH,
             name = "Hype Fishing",
             description = "Removes the extra step of rotating down",
-            category = "AutoKill"
+            category = "Auto Kill"
     )
     public boolean AUTO_KILL_HYPE_FISHING = true; 
 
@@ -31,7 +40,7 @@ public class Config extends Vigilant {
             type = PropertyType.SWITCH,
             name = "Barn Fishing",
             description = "Begins to kill mobs after a certain amount of mobs is spawned",
-            category = "AutoKill",
+            category = "Auto Kill",
             subcategory = "Barn Fishing"
     )
     public boolean AUTO_KILL_BARN_FISHING = true;
@@ -51,7 +60,7 @@ public class Config extends Vigilant {
             type = PropertyType.SWITCH,
             name = "Render Box",
             description = "Renders a box over mobs spawned",
-            category = "AutoKill",
+            category = "Auto Kill",
             subcategory = "Render Box"
     )
     public boolean AUTO_KILL_RENDER_BOX = true;
@@ -61,7 +70,7 @@ public class Config extends Vigilant {
             type = PropertyType.SWITCH,
             name = "Render Box Color",
             description = "Color of the box being rendered",
-            category = "AutoKill",
+            category = "Auto Kill",
             subcategory = "Render Box"
     )
     public boolean AUTO_KILL_RENDER_BOX_COLOR = true;
@@ -153,6 +162,11 @@ public class Config extends Vigilant {
     public Config() {
         super(new File("./config/SkyFish.toml"));
         initialize();
+    }
+
+    public String[] getWeapon() {
+        String[][] weapons = new String[][] { new String[] { "Hyperion", "Scylla", "Astraea", "Valkyrie" }, new String[] { "Fire Veil" }};
+        return weapons[AUTO_KILL_WEAPON];
     }
 
     public int getDelay() {
