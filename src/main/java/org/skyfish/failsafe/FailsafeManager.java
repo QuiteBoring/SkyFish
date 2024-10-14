@@ -80,8 +80,9 @@ public class FailsafeManager {
     }
 
     public void possibleDetection(Failsafe failsafe) {
-        checkTimer.reset();
+        if (emergencyQueue.contains(failsafe)) return;
         this.emergencyQueue.add(failsafe);
+        checkTimer.reset();
     }
 
     @SubscribeEvent
