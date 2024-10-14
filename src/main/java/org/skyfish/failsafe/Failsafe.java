@@ -5,6 +5,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.skyfish.event.impl.PacketEvent;
+import org.skyfish.handler.MacroHandler;
 
 public class Failsafe {
 
@@ -19,7 +20,10 @@ public class Failsafe {
         return type;
     }
 
-    public void onTrigger() {}
+    public void onTrigger() {
+        MacroHandler.getInstance().setEnabled(false);
+        FailsafeManager.getInstance().reset();
+    }
     
     public void onTick() {}
     public void onChat(ClientChatReceivedEvent event) {}
