@@ -29,6 +29,7 @@ public class FishingMacro extends Feature {
         startedRotating = false;  
         shouldCast = mc.thePlayer.fishEntity == null;
         rodSlot = -1;
+        weaponSlot = -1;
         startingLocation = GameStateHandler.getInstance().getLocation();
         fishingHook = null;
         delayTimer.reset();
@@ -41,7 +42,7 @@ public class FishingMacro extends Feature {
         startedRotating = false;
         shouldCast = false;
         rodSlot = -1;
-        startingLocation = null;
+        weaponSlot = -1;
         fishingHook = null;
         delayTimer.reset();
         lastTimeReeled.reset();
