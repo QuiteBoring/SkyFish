@@ -2,6 +2,7 @@ package org.skyfish.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.skyfish.util.*;
@@ -79,6 +80,10 @@ public class AudioHandler {
         numSounds--;
     }
 
+    public void initialize() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+    
     private static AudioHandler instance;
     public static AudioHandler getInstance() {
         if (instance == null) {
