@@ -62,7 +62,9 @@ public class AutoKill extends Feature {
                 if (!placeFlare) {
                     placeFlare = true;
                     AutoFlare.getInstance().placeFlare(() -> {
-                        MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD);  
+                        MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD); 
+                        placeFlare = false;
+                        placeTotem = false; 
                     });
                 }
             }
