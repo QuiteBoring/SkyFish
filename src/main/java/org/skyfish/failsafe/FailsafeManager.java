@@ -3,6 +3,7 @@ package org.skyfish.failsafe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -35,6 +36,7 @@ public class FailsafeManager {
         failsafes.add(TeleportFailsafe.getInstance());
         failsafes.add(WorldChangeFailsafe.getInstance());
         failsafes.forEach((failsafe) -> failsafe.initialize());
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public Failsafe getHighestPriority() {
@@ -77,6 +79,9 @@ public class FailsafeManager {
 
     public void detection(Failsafe failsafe) {
         triggeredFailsafe = Optional.of(failsafe);
+        LogUtils.sendError(triggeredFailsafe.get().getName() +  " failsafe has been triggered!");
+        checkTimer.reset();
+        if (Config.getInstance().FAILSAFE_PLAY_SOUND) AudioHandler.getInstance().playSound();
     }
 
     public void possibleDetection(Failsafe failsafe) {
