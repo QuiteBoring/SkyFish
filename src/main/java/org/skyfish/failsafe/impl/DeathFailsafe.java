@@ -17,7 +17,7 @@ public class DeathFailsafe extends Failsafe {
         String msg = StringUtils.stripControlCodes(event.message.getUnformattedText());
         if (msg.contains(":")) return;
         if (msg.contains("☠ You")) {
-            FailsafeManager.getInstance().detection(this);
+            FailsafeManager.getInstance().possibleDetection(this);
         }
     }
 
