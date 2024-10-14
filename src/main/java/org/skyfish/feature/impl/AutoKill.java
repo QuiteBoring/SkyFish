@@ -198,7 +198,6 @@ public class AutoKill extends Feature {
         put("An Oasis Sheep appears from the water.", "Oasis Sheep");
         put("An Oasis Rabbit appears from the water.", "Oasis Rabbit");
         put("An Abyssal Miner breaks out of the water!", "Abyssal Miner");
-        put("WOAH! A Plhlegblast appeared.", "Plhlegblast");
         put("Your Chumcap Bucket trembles, it's an Agarimoo.", "Agarimoo");
         put("A Squid appeared.", "Squid");
         put("You caught a Sea Walker.", "Sea Walker");
