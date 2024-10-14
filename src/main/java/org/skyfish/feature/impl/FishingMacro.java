@@ -160,11 +160,11 @@ public class FishingMacro extends Feature {
 
             case ROTATE_DOWN: {
                 if (!startedRotating) {
-                    SkyFish.Rotation.easeTo(mc.thePlayer.rotationYaw, 90F, 200);
+                    RotationHandler.getInstance().easeTo(mc.thePlayer.rotationYaw, 90F, 200);
                     startedRotating = true;
                 }
 
-                if (!SkyFish.Rotation.isDone()) return;
+                if (!RotationHandler.getInstance().isDone()) return;
                 if (mc.thePlayer.rotationPitch != 90F) {
                     startedRotating = false;
                 } else {
@@ -177,11 +177,11 @@ public class FishingMacro extends Feature {
             case ROTATE_BACK: {
                 if (!startedRotating) {
                     Rotation data = MacroHandler.getInstance().getAngle();
-                    SkyFish.Rotation.easeTo(data.getYaw(), data.getPitch(), 200);
+                    RotationHandler.getInstance().easeTo(data.getYaw(), data.getPitch(), 200);
                     startedRotating = true;
                 }
 
-                if (!SkyFish.Rotation.isDone()) return;
+                if (!RotationHandler.getInstance().isDone()) return;
                 startedRotating = false;
                 MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD);
             }
