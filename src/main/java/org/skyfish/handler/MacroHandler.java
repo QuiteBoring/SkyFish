@@ -26,6 +26,10 @@ public class MacroHandler {
     }
 
     public Rotation getAngle() {
+        if (mainLookAtBlock == null) {
+            mainLookAtBlock  = mc.thePlayer.rayTrace(100.0, 1.0f);
+        }
+
         BlockPos blockPos = new BlockPos(mainLookAtBlock.getBlockPos().getX() + 1, mainLookAtBlock.getBlockPos().getY(), mainLookAtBlock.getBlockPos().getZ());
         Vec3 playerPos = mc.thePlayer.getPositionVector();
         float pitchOffset = (float) ((Math.random() * (2.5 - -2.5)) + -2.5);
