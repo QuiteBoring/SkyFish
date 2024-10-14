@@ -43,7 +43,7 @@ public class Failsafe {
     }
 
     public static enum Type {
-        DEATH("Death", 6),
+        DEATH("Death", 3),
         TELEPORT("Teleport", 5),
         ROTATION("Rotation", 4),
         EVACUATE("Evacuate", 1),
