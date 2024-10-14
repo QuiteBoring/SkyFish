@@ -29,6 +29,17 @@ public class AutoKill extends Feature {
 
     private boolean placeFlare = false;
     private boolean placeTotem = false;
+    private int hypeCount = 0;
+
+    @Override
+    public void start() {
+        hypeCount = 0;
+    }
+
+    @Override
+    public void stop() {
+        hypeCount = 0;
+    }
 
     @Override
     public void onTick() {
@@ -54,15 +65,21 @@ public class AutoKill extends Feature {
                         if (mob.getDistanceToEntity(mc.thePlayer) < 6) {
                             KeybindUtils.rightClick();
                             delayTimer.reset();
+                            hypeCount++;
                         }
                     }
 
-                    if (anyAlive) return;
+                    if (Config.getInstance().AUTO_KILL_HYPE_CAP == 0) {
+                        if (anyAlive) return;
+                    } else {
+                        if (!(hypeCount >= Config.getInstance().AUTO_KILL_HYPE_CAP)) return;
+                    }
                 }
 
                 if (!placeFlare) {
                     placeFlare = true;
                     AutoFlare.getInstance().placeFlare(() -> {
+                        hypeCount = 0;
                         placeFlare = false;
                         placeTotem = false;
                         fishingMobs.clear();
@@ -100,7 +117,7 @@ public class AutoKill extends Feature {
         if (!entities.isEmpty()) {
             for (Entity mob : entities) {
                 if (fishingMobs.keySet().stream().anyMatch((entity) ->  entity.getUniqueID().equals(mob.getUniqueID()))) continue;
-                // if (!fishedUpMobs.stream().anyMatch((e) -> mob.getCustomNameTag().contains(e))) continue;
+                if (!fishedUpMobs.stream().anyMatch((e) -> mob.getCustomNameTag().contains(e))) continue;
                 fishingMobs.put(mob, getEntityCuttingOtherEntity(mob, null));
 
                 if (Config.getInstance().AUTO_KILL_MOB_LIMIT == 0 || fishedUpMobs.size() >= Config.getInstance().AUTO_KILL_MOB_LIMIT) {

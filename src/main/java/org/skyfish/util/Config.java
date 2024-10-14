@@ -27,6 +27,16 @@ public class Config extends Vigilant {
             category = "Auto Kill"
     )
     public int AUTO_KILL_WEAPON = 0;
+
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "Hype Cap",
+            description = "Limits how much you can hype (0 =  no limit)",
+            category = "Auto Kill",
+            min = 0,
+            max = 20
+    )
+    public int AUTO_KILL_HYPE_CAP = 0;  
     
     @Property(
             type = PropertyType.SWITCH,
