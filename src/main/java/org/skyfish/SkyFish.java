@@ -34,6 +34,7 @@ public class SkyFish {
         GameStateHandler.getInstance().initialize();
         RotationHandler.getInstance().initialize();
         BaritoneHandler.getInstance().initialize();
+        AudioHandler.getInstance().initialize();
         MacroHandler.getInstance().initialize();
 
         MinecraftForge.EVENT_BUS.register(new SkyFish());
