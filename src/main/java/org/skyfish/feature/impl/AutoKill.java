@@ -117,7 +117,7 @@ public class AutoKill extends Feature {
         if (!entities.isEmpty()) {
             for (Entity mob : entities) {
                 if (fishingMobs.keySet().stream().anyMatch((entity) ->  entity.getUniqueID().equals(mob.getUniqueID()))) continue;
-                if (!fishedUpMobs.stream().anyMatch((e) -> mob.getCustomNameTag().contains(e))) continue;
+                if (!fishedUpMobs.stream().anyMatch((e) -> mob.getCustomNameTag().contains(e)) && !mob.getCustomNameTag().contains("Baby Magma Slug")) continue;
                 fishingMobs.put(mob, getEntityCuttingOtherEntity(mob, null));
 
                 if (Config.getInstance().AUTO_KILL_MOB_LIMIT == 0 || fishedUpMobs.size() >= Config.getInstance().AUTO_KILL_MOB_LIMIT) {
