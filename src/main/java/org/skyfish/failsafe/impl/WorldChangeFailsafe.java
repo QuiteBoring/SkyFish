@@ -17,7 +17,7 @@ public class WorldChangeFailsafe extends Failsafe {
     public void onTick() {
         if (!Config.getInstance().FAILSAFE_WORLD_CHANGE) return;
         if (FishingMacro.getInstance().startingLocation != GameStateHandler.getInstance().getLocation()) {
-            FailsafeManager.getInstance().possibleDetection(this);
+            FailsafeManager.getInstance().detection(this);
         }
     }
 
@@ -29,7 +29,7 @@ public class WorldChangeFailsafe extends Failsafe {
         String message = StringUtils.stripControlCodes(event.message.getUnformattedText());
         if (message.contains(":")) return;
         if (message.contains("You were spawned in Limbo.") || message.contains("/limbo") || message.startsWith("A kick occurred in your connection")) {
-            FailsafeManager.getInstance().possibleDetection(this);
+            FailsafeManager.getInstance().detection(this);
         }
     }
 
