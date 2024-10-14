@@ -194,6 +194,12 @@ public class AutoKill extends Feature {
     }
 
     public static Map<String, String> mobs = new HashMap<String, String>() {{
+        put("Pitch darkness reveals a Night Squid.", "Night Squid");
+        put("An Oasis Sheep appears from the water.", "Oasis Sheep");
+        put("An Oasis Rabbit appears from the water.", "Oasis Rabbit");
+        put("An Abyssal Miner breaks out of the water!", "Abyssal Miner");
+        put("WOAH! A Plhlegblast appeared.", "Plhlegblast");
+        put("Your Chumcap Bucket trembles, it's an Agarimoo.", "Agarimoo");
         put("A Squid appeared.", "Squid");
         put("You caught a Sea Walker.", "Sea Walker");
         put("You stumbled upon a Sea Guardian.", "Sea Guardian");
@@ -217,7 +223,6 @@ public class AutoKill extends Feature {
         put("The Grinch stole Jerry's Gifts...get them back!", "Grinch");
         put("What is this creature!?", "Yeti");
         put("You found a forgotten Nutcracker laying beneath the ice.", "Nutcracker");
-        put("A Reindrake forms from the depths.", "Reindrake");
         put("A tiny fin emerges from the water, you've caught a Nurse Shark.", "Nurse Shark");
         put("You spot a fin as blue as the water it came from, it's a Blue Shark.", "Blue Shark");
         put("A striped beast bounds from the depths, the wild Tiger Shark!", "Tiger Shark");
