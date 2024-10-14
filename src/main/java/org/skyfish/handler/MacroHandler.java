@@ -49,6 +49,7 @@ public class MacroHandler {
 
     public void onEnable() {
         AudioHandler.getInstance().setSoundBeforeChange(mc.gameSettings.getSoundLevel(SoundCategory.MASTER));
+        FailsafeManager.getInstance().reset();
         mainLookAtBlock = mc.thePlayer.rayTrace(100.0, 1.0f);
         setStep(Step.FIND_ROD);
         LogUtils.sendSuccess("Macro Enabled");
@@ -57,7 +58,7 @@ public class MacroHandler {
 
     public void onDisable() {
         AudioHandler.getInstance().resetSound();
-        FailsafeManager.getInstance().clear();
+        FailsafeManager.getInstance().reset();
         mainLookAtBlock = null;
         setStep(Step.NONE);
         LogUtils.sendSuccess("Macro Disabled");
