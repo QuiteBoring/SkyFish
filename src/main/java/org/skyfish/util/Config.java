@@ -80,6 +80,100 @@ public class Config extends Vigilant {
 
     @Property(
             type = PropertyType.SWITCH,
+            name = "Death Failsafe",
+            description = "Enable/disable death failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_DEATH = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Teleport Failsafe",
+            description = "Enable/disable teleport failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_TELEPORT = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Rotation Failsafe",
+            description = "Enable/disable rotation failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_ROTATION = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Disconnect Failsafe",
+            description = "Enable/disable disconnect failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_DISCONNECT = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Evacuate Failsafe",
+            description = "Enable/disable evacuate failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_EVACUATE = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Item Change Failsafe",
+            description = "Enable/disable item change failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_ITEM_CHANGE = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Knockback Failsafe",
+            description = "Enable/disable knockback failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_KNOCKBACK = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Full Inventory Failsafe",
+            description = "Enable/disable full inventory failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_FULL_INVENTORY = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "World Change Failsafe",
+            description = "Enable/disable world change failsafe",
+            category = "Failsafes"
+    )
+    public boolean FAILSAFE_WORLD_CHANGE = true;
+    
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "Vertical Knockback Threshold",
+            description = "Minimum vertical knockback to trigger failsafe (value * 1000)",
+            category = "Failsafes",
+            subcategory = "Options",
+            min = 2,
+            max = 10
+    )
+    public int FAILSAFE_VERITCAL_KNOCKBACK_THRESHOLD = 4;      
+
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "Rotation Sensitivity",
+            description = "Change Sensitivity (lower = stricter)",
+            category = "Failsafes",
+            subcategory = "Options",
+            min = 1,
+            max = 30
+    )
+    public int FAILSAFE_ROTATION_SENSITIVITY = 7;
+
+    @Property(
+            type = PropertyType.SWITCH,
             name = "Play Sound",
             description = "Play an anvil sound when a failsafe is triggered",
             category = "Failsafes"

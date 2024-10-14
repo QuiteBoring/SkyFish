@@ -28,7 +28,7 @@ public class SkyFish {
         ClientRegistry.registerKeyBinding(settingsKeybind);
         ClientRegistry.registerKeyBinding(macroKeybind);
 
-        // FailsafeManager.getInstance().initialize();
+        FailsafeManager.getInstance().initialize();
         FeatureManager.getInstance().initialize();
 
         GameStateHandler.getInstance().initialize();

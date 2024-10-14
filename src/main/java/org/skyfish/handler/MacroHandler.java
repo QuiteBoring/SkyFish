@@ -1,6 +1,7 @@
 package org.skyfish.handler;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.util.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -47,6 +48,7 @@ public class MacroHandler {
     }
 
     public void onEnable() {
+        AudioHandler.getInstance().setSoundBeforeChange(mc.gameSettings.getSoundLevel(SoundCategory.MASTER));
         mainLookAtBlock = mc.thePlayer.rayTrace(100.0, 1.0f);
         setStep(Step.FIND_ROD);
         LogUtils.sendSuccess("Macro Enabled");
@@ -54,6 +56,7 @@ public class MacroHandler {
     }
 
     public void onDisable() {
+        AudioHandler.getInstance().resetSound();
         FailsafeManager.getInstance().clear();
         mainLookAtBlock = null;
         setStep(Step.NONE);

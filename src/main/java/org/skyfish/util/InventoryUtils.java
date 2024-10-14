@@ -20,7 +20,7 @@ public class InventoryUtils {
         
         return slotId;
     }
-    
+
     public static int searchItems(String[] names) {
         int slotId = -1;
 
@@ -36,13 +36,35 @@ public class InventoryUtils {
         return slotId;
     }
 
+    public static boolean checkSlot(String name, int slot) {
+        ItemStack itemStack = mc.thePlayer.inventory.mainInventory[slot];
+        if (itemStack == null) return false;
+        if (StringUtils.stripControlCodes(itemStack.getDisplayName()).toLowerCase().contains(name.toLowerCase())) return true;
+        
+        return false;
+    }
+
+    public static boolean checkSlots(String[] names, int slot) {
+        boolean isThere = false;
+        ItemStack itemStack = mc.thePlayer.inventory.mainInventory[slot];
+        if (itemStack == null) return false;
+        String item = StringUtils.stripControlCodes(itemStack.getDisplayName()).toLowerCase();
+
+        for (String name : names) {
+            if (item.contains(name.toLowerCase())) {
+                isThere = true;
+            }
+        }
+        
+        return isThere;
+    }
+
     public static boolean isInventoryEmpty(EntityPlayer player) {
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             if (player.inventory.getStackInSlot(i) != null) {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -52,7 +74,6 @@ public class InventoryUtils {
                 return false;
             }
         }
-
         return true;
     }
 

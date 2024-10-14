@@ -54,14 +54,14 @@ public class AutoKill extends Feature {
                     return;
                 }
 
+                boolean anyAlive = false;
                 if (Config.getInstance().getWeapon()[0].equals("Fire Veil")) {
                     KeybindUtils.rightClick();
                 } else {
-                    boolean anyAlive = false;
-
                     for (Entity mob : fishingMobs.keySet()) {
                         if (!anyAlive) anyAlive = !mob.isDead;
                         if (mob.isDead || !delayTimer.hasElasped(Config.getInstance().getDelay())) continue;
+                        if (mob.getCustomNameTag().contains("Vanquisher") && mob.ticksExisted < 120) continue; 
                         if (mob.getDistanceToEntity(mc.thePlayer) < 6) {
                             KeybindUtils.rightClick();
                             delayTimer.reset();
@@ -78,11 +78,12 @@ public class AutoKill extends Feature {
 
                 if (!placeFlare) {
                     placeFlare = true;
+                    final boolean shouldClear = !anyAlive;
                     AutoFlare.getInstance().placeFlare(() -> {
                         hypeCount = 0;
                         placeFlare = false;
                         placeTotem = false;
-                        fishingMobs.clear();
+                        if (shouldClear) fishingMobs.clear();
                         fishedUpMobs.clear();
                     });
                 }
@@ -236,6 +237,7 @@ public class AutoKill extends Feature {
         put("A flaming worm surfaces from the depths!", "Flaming Worm");
         put("A Lava Blaze has surfaced from the depths!", "Lava Blaze");
         put("A Lava Pigman arose from the depths!", "Lava Pigman");
+        put("A Vanquisher is spawning nearby!", "Vanquisher");
     }};
 
 }

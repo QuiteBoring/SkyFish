@@ -43,6 +43,7 @@ public class Failsafe {
         TELEPORT("Teleport", 5),
         ROTATION("Rotation", 4),
         EVACUATE("Evacuate", 1),
+        KNOCKBACK("Knockback", 4),
         DISCONNECT("Disconnect", 1),
         ITEM_CHANGE("Item Change", 3),
         WORLD_CHANGE("World Change", 2),

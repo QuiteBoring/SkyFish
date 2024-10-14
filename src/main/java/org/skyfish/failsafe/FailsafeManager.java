@@ -7,8 +7,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.skyfish.event.impl.PacketEvent;
+import org.skyfish.failsafe.impl.*;
+import org.skyfish.handler.*;
 import org.skyfish.util.*;
 
+import javax.sound.sampled.*;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -22,7 +25,15 @@ public class FailsafeManager {
     private final Timer checkTimer = new Timer();
     
     public void initialize() {
-        // failsafes.add(NewFailsafe.getInstance());
+        failsafes.add(DeathFailsafe.getInstance());
+        failsafes.add(DisconnectFailsafe.getInstance());
+        failsafes.add(EvacuateFailsafe.getInstance());
+        failsafes.add(FullInventoryFailsafe.getInstance());
+        failsafes.add(ItemChangeFailsafe.getInstance());
+        failsafes.add(KnockbackFailsafe.getInstance());
+        failsafes.add(RotationFailsafe.getInstance());
+        failsafes.add(TeleportFailsafe.getInstance());
+        failsafes.add(WorldChangeFailsafe.getInstance());
         failsafes.forEach((failsafe) -> failsafe.initialize());
     }
 
@@ -38,26 +49,16 @@ public class FailsafeManager {
     
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        if (mc.theWorld == null || mc.thePlayer == null || !MacroHandler.getInstance().isEnabled()) return;
         failsafes.forEach((failsafe) -> failsafe.onTick());
-        if (mc.theWorld == null || mc.thePlayer == null || emergencyQueue.isEmpty()) return;
+        if (emergencyQueue.isEmpty()) return;
         
         if (checkTimer.hasElasped(2000) && !triggeredFailsafe.isPresent()) {
             triggeredFailsafe = Optional.of(getHighestPriority());
             LogUtils.sendError(triggeredFailsafe.get().getName() +  " failsafe has been triggered!");
             checkTimer.reset();
             
-            if (Config.getInstance().FAILSAFE_PLAY_SOUND) {
-                Multithreading.runAsync(() -> {
-                    try {
-                        float prevSound = mc.gameSettings.getSoundLevel(SoundCategory.MASTER);
-                        mc.gameSettings.setSoundLevel(SoundCategory.MASTER, 100.0F);
-                        Thread.sleep(1000);
-                        mc.theWorld.playSound(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, "random.anvil_land", 10.0F, 1.0F, false);
-                        Thread.sleep(1000);
-                        mc.gameSettings.setSoundLevel(SoundCategory.MASTER, prevSound);
-                    } catch (Exception ignored) {}
-                });
-            }
+            if (Config.getInstance().FAILSAFE_PLAY_SOUND) AudioHandler.getInstance().playSound();
         }
         
         if (triggeredFailsafe.isPresent()) {
@@ -68,6 +69,19 @@ public class FailsafeManager {
     public void clear() {
         emergencyQueue.clear();
         triggeredFailsafe = Optional.empty();
+    }
+
+    public Optional<Failsafe> getTriggeredFailsafe() {
+        return triggeredFailsafe;
+    }
+
+    public void detection(Failsafe failsafe) {
+        triggeredFailsafe = Optional.of(failsafe);
+    }
+
+    public void possibleDetection(Failsafe failsafe) {
+        checkTimer.reset();
+        this.emergencyQueue.add(failsafe);
     }
 
     @SubscribeEvent
