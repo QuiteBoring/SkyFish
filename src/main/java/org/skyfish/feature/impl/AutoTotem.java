@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.*;
 import org.skyfish.feature.Feature;
+import org.skyfish.handler.MacroHandler;
 import org.skyfish.handler.RotationHandler;
 import org.skyfish.util.Timer;
 import org.skyfish.util.*;
@@ -29,7 +30,7 @@ public class AutoTotem extends Feature {
         timer.reset();
     }
 
-    public void placeTotem(Runnable runnable) {
+    public void placeTotem() {
         if (!Config.getInstance().FEATURE_AUTO_TOTEM || !timer.hasElasped(5000)) return;
         timer.reset();
 
@@ -51,8 +52,8 @@ public class AutoTotem extends Feature {
                     }
                 }
             } catch (Exception error) {}
-            runnable.run();
             timer.reset();
+            MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_WEAPON);
         });
     }
 

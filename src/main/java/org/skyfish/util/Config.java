@@ -67,13 +67,13 @@ public class Config extends Vigilant {
 
 
     @Property(
-            type = PropertyType.SWITCH,
+            type = PropertyType.COLOR,
             name = "Render Box Color",
             description = "Color of the box being rendered",
             category = "Auto Kill",
             subcategory = "Render Box"
     )
-    public boolean AUTO_KILL_RENDER_BOX_COLOR = true;
+    public Color AUTO_KILL_RENDER_BOX_COLOR = new Color(255, 255, 255, 155);
 
     // region Failsafes
 

@@ -19,7 +19,7 @@ public class AutoCrouch extends Feature {
 
     @Override
     public void start() {
-        if (Config.getInstance().FEATURE_AUTO_CROUCH) KeyBinding.setKeyBindState(mc.gameSettings.keyBindSneak.getKeyCode(), false);
+        if (Config.getInstance().FEATURE_AUTO_CROUCH) KeyBinding.setKeyBindState(mc.gameSettings.keyBindSneak.getKeyCode(), true);
         super.start();
     }
 
