@@ -68,20 +68,13 @@ public class FailsafeManager {
         }
     }
 
-    public void clear() {
+    public void reset() {
         emergencyQueue.clear();
         triggeredFailsafe = Optional.empty();
     }
 
     public Optional<Failsafe> getTriggeredFailsafe() {
         return triggeredFailsafe;
-    }
-
-    public void detection(Failsafe failsafe) {
-        triggeredFailsafe = Optional.of(failsafe);
-        LogUtils.sendError(triggeredFailsafe.get().getName() +  " failsafe has been triggered!");
-        checkTimer.reset();
-        if (Config.getInstance().FAILSAFE_PLAY_SOUND) AudioHandler.getInstance().playSound();
     }
 
     public void possibleDetection(Failsafe failsafe) {
