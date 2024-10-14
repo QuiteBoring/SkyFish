@@ -42,7 +42,7 @@ public class FailsafeManager {
     public Failsafe getHighestPriority() {
         Failsafe highestPriority = failsafes.get(0);
         
-        for (Failsafe failsafe : failsafes) {
+        for (Failsafe failsafe : emergencyQueue) {
             if (failsafe.getPriority() > highestPriority.getPriority()) highestPriority = failsafe;
         }
         
@@ -81,6 +81,14 @@ public class FailsafeManager {
         if (emergencyQueue.contains(failsafe)) return;
         this.emergencyQueue.add(failsafe);
         checkTimer.reset();
+    }
+
+    public void detection(Failsafe failsafe) {
+        triggeredFailsafe = Optional.of(failsafe);
+        LogUtils.sendError(triggeredFailsafe.get().getName() +  " failsafe has been triggered!");
+        checkTimer.reset();
+        
+        if (Config.getInstance().FAILSAFE_PLAY_SOUND) AudioHandler.getInstance().playSound();
     }
 
     @SubscribeEvent
