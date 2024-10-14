@@ -1,11 +1,14 @@
-package org.skyfish.handler;
+package org.skyfish.handlers;
 
+import org.skyfish.event.impl.UpdateScoreboardEvent;
+import org.skyfish.event.impl.UpdateTablistEvent;
+import org.skyfish.event.impl.UpdateTablistFooterEvent;
+import org.skyfish.util.InventoryUtils;
+import org.skyfish.util.ScoreboardUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.skyfish.event.impl.*;
-import org.skyfish.util.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -216,6 +219,7 @@ public class GameStateHandler {
     }
 
     private static GameStateHandler instance;
+    
     public static GameStateHandler getInstance() {
         if (instance == null) {
             instance = new GameStateHandler();
