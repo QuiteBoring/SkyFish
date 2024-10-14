@@ -1,8 +1,11 @@
 package org.skyfish.feature.impl;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.util.*;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.skyfish.feature.Feature;
@@ -12,10 +15,11 @@ import org.skyfish.util.Timer;
 import org.skyfish.util.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AutoKill extends Feature {
-
-    private Map<javax.swing.text.html.parser.Entity, javax.swing.text.html.parser.Entity> fishingMobs = new HashMap();
+    
+    private Map<Entity, Entity> fishingMobs = new HashMap();
     private ArrayList<String> fishedUpMobs = new ArrayList<>();
     private Timer delayTimer = new Timer();
 
@@ -108,8 +112,8 @@ public class AutoKill extends Feature {
     }
 
     private Entity getEntityCuttingOtherEntity(Entity e, Class<?> entityType) {
-        List<Entity> possible = Minecraft.getMinecraft().theWorld.getEntitiesInAABBexcluding(e, e.getEntityBoundingBox().expand(0.3D, 2.0D, 0.3D), a -> {
-            boolean flag1 = (!a.isDead && !a.equals(Minecraft.getMinecraft().thePlayer));
+        List<Entity> possible = mc.theWorld.getEntitiesInAABBexcluding(e, e.getEntityBoundingBox().expand(0.3D, 2.0D, 0.3D), a -> {
+            boolean flag1 = (!a.isDead && !a.equals(mc.thePlayer));
             boolean flag2 = !(a instanceof EntityArmorStand);
             boolean flag3 = !(a instanceof net.minecraft.entity.projectile.EntityFireball);
             boolean flag4 = !(a instanceof net.minecraft.entity.projectile.EntityFishHook);
@@ -119,8 +123,7 @@ public class AutoKill extends Feature {
         if (!possible.isEmpty()) return Collections.min(possible, Comparator.comparing(e2 -> e2.getDistanceToEntity(e)));
         return null;
     }
-
-    private Pattern doubleHookPattern = Pattern.compile("doublehook", "§eIt's a §r§aDouble Hook§r§e!(?: Woot woot!)?");
+    
     private boolean doubleHook = false;
 
     @Override
@@ -130,7 +133,7 @@ public class AutoKill extends Feature {
         if (msg.contains(":")) return;
 
         
-        if (doubleHookPattern.matches(event.message) || msg.toLowerCase().contains("double hook")) {
+        if (msg.contains("Double Hook") || msg.toLowerCase().contains("double hook")) {
             doubleHook = true;
         }
 
