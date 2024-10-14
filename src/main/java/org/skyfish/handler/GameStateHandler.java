@@ -1,4 +1,4 @@
-package org.skyfish.handlers;
+package org.skyfish.handler;
 
 import org.skyfish.event.impl.UpdateScoreboardEvent;
 import org.skyfish.event.impl.UpdateTablistEvent;
