@@ -37,18 +37,9 @@ public class Config extends Vigilant {
     public boolean AUTO_KILL_HYPE_FISHING = true; 
 
     @Property(
-            type = PropertyType.SWITCH,
-            name = "Barn Fishing",
-            description = "Begins to kill mobs after a certain amount of mobs is spawned",
-            category = "Auto Kill",
-            subcategory = "Barn Fishing"
-    )
-    public boolean AUTO_KILL_BARN_FISHING = false;
-
-    @Property(
             type = PropertyType.SLIDER,
             name = "Mob Limit",
-            description = "When to start killing mobs",
+            description = "When to start killing mobs (0 = disable barn fishing)",
             category = "Auto Kill",
             subcategory = "Barn Fishing",
             min = 0,

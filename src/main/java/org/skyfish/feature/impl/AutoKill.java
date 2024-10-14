@@ -27,50 +27,49 @@ public class AutoKill extends Feature {
         super("AutoKill");
     }
 
-    private boolean killing = false;
     private boolean placeFlare = false;
     private boolean placeTotem = false;
 
     @Override
     public void onTick() {
         switch(MacroHandler.getInstance().getStep()) {
-            default: {}
+            default: {
+                return;
+            }
             case KILL: {
                 if (!placeTotem) {
                     placeTotem = true;
                     AutoTotem.getInstance().placeTotem();
+                    return;
                 }
 
-                if (killing) {
-                    if (Config.getInstance().getWeapon()[0].equals("Fire Veil")) {
-                        KeybindUtils.rightClick();
-                        killing = false;
-                    } else {
-                        boolean allDead = true;
+                if (Config.getInstance().getWeapon()[0].equals("Fire Veil")) {
+                    KeybindUtils.rightClick();
+                } else {
+                    boolean anyAlive = false;
 
-                        for (Entity mob : fishingMobs.keySet()) {
-                            if (mob.isDead || !delayTimer.hasElasped(Config.getInstance().getDelay())) continue;
-                            if (allDead) allDead = false;
-                            if (mob.getDistanceToEntity(mc.thePlayer) < 6) {
-                                KeybindUtils.rightClick();
-                                delayTimer.reset();
-                            }
+                    for (Entity mob : fishingMobs.keySet()) {
+                        if (!anyAlive) anyAlive = !mob.isDead;
+                        if (mob.isDead || !delayTimer.hasElasped(Config.getInstance().getDelay())) continue;
+                        if (mob.getDistanceToEntity(mc.thePlayer) < 6) {
+                            KeybindUtils.rightClick();
+                            delayTimer.reset();
                         }
-
-                        if (allDead) killing = false;
                     }
 
-                    return;
+                    if (anyAlive) return;
                 }
 
                 if (!placeFlare) {
                     placeFlare = true;
                     AutoFlare.getInstance().placeFlare(() -> {
-                        MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD); 
                         placeFlare = false;
-                        placeTotem = false; 
+                        placeTotem = false;
+                        fishingMobs.clear();
+                        fishedUpMobs.clear();
                     });
                 }
+                return;
             }
         }
     }
@@ -79,6 +78,13 @@ public class AutoKill extends Feature {
     public void onWorldRender(RenderWorldLastEvent event) {
         if (!MacroHandler.getInstance().isEnabled()|| !Config.getInstance().AUTO_KILL) return;
         
+        Iterator<Map.Entry<Entity, Entity>> iterator = fishingMobs.entrySet().iterator();
+
+        while(iterator.hasNext()) {
+            Map.Entry<Entity, Entity> mob = iterator.next();
+            if (mob.getKey().isDead) iterator.remove();
+        }
+
         if (!fishingMobs.isEmpty() && Config.getInstance().AUTO_KILL_RENDER_BOX) {
             for (Map.Entry<Entity, Entity> mob : fishingMobs.entrySet()) {
                 RenderUtils.renderBoundingBox(mob.getValue(), event.partialTicks, Config.getInstance().AUTO_KILL_RENDER_BOX_COLOR.getRGB());
@@ -94,8 +100,13 @@ public class AutoKill extends Feature {
         if (!entities.isEmpty()) {
             for (Entity mob : entities) {
                 if (fishingMobs.keySet().stream().anyMatch((entity) ->  entity.getUniqueID().equals(mob.getUniqueID()))) continue;
-                if (!mobs.values().stream().anyMatch((e) -> mob.getCustomNameTag().contains(e)) || !fishedUpMobs.stream().anyMatch((e) -> mob.getCustomNameTag().contains(e))) continue;
+                // if (!fishedUpMobs.stream().anyMatch((e) -> mob.getCustomNameTag().contains(e))) continue;
                 fishingMobs.put(mob, getEntityCuttingOtherEntity(mob, null));
+
+                if (Config.getInstance().AUTO_KILL_MOB_LIMIT == 0 || fishedUpMobs.size() >= Config.getInstance().AUTO_KILL_MOB_LIMIT) {
+                    fishedUpMobs.clear();
+                    MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_WEAPON);
+                }
             } 
         }
     }
@@ -106,6 +117,7 @@ public class AutoKill extends Feature {
                 .filter((v) -> v.getDistanceToEntity(mc.thePlayer) < 6 &&
                 !v.getName().contains(mc.thePlayer.getName()) &&
                 !v.isDead &&
+                mobs.values().stream().anyMatch((a) -> v.getCustomNameTag().contains(a)) &&
                 ((EntityLivingBase) v).getHealth() > 0)
                 .filter((entity) -> mc.thePlayer.canEntityBeSeen(entity))
                 .collect(Collectors.toList());
@@ -145,12 +157,6 @@ public class AutoKill extends Feature {
                 if (doubleHook) fishedUpMobs.add(mob);
                 doubleHook = false;
             }
-        }
-
-        if (Config.getInstance().AUTO_KILL_BARN_FISHING || fishedUpMobs.size() >= Config.getInstance().AUTO_KILL_MOB_LIMIT) {
-            fishedUpMobs.clear();
-            killing = true;
-            MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_WEAPON);
         }
     }
 

@@ -59,6 +59,7 @@ public class FishingMacro extends Feature {
     public void onPacketReceive(PacketEvent.Receive event) {
         if (event.packet instanceof S14PacketEntity.S17PacketEntityLookMove) {
             Entity entity = ((S14PacketEntity.S17PacketEntityLookMove) event.packet).getEntity(mc.theWorld);
+            if (entity == null) return;
             if (!(entity instanceof EntityFishHook) || ((EntityFishHook) entity).angler != mc.thePlayer) return;
             fishingHook = (EntityFishHook) entity;
         }
@@ -171,6 +172,7 @@ public class FishingMacro extends Feature {
                     startedRotating = false;
                     MacroHandler.getInstance().setStep(MacroHandler.Step.KILL);
                 }
+                return;
             }
 
 
@@ -184,6 +186,7 @@ public class FishingMacro extends Feature {
                 if (!RotationHandler.getInstance().isDone()) return;
                 startedRotating = false;
                 MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD);
+                return;
             }
         }
     }

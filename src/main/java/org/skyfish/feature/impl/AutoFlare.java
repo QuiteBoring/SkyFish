@@ -11,8 +11,8 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.skyfish.feature.Feature;
+import org.skyfish.handler.MacroHandler;
 import org.skyfish.handler.RotationHandler;
-import org.skyfish.util.Timer;
 import org.skyfish.util.*;
 
 import java.util.List;
@@ -24,7 +24,6 @@ public class AutoFlare extends Feature {
 
     private final Pattern ORB_PATTERN = Pattern.compile("[A-Za-z ]* (?<seconds>[0-9]*)s");
     private Flare flare = null;
-    private Timer timer = new Timer();
     
     public AutoFlare() {
         super("AutoFlare");
@@ -33,24 +32,26 @@ public class AutoFlare extends Feature {
     @Override
     public void start() {
         flare = null;
-        timer.reset();
     }
 
     @Override 
     public void stop() {
         flare = null;
-        timer.reset();
     }
 
     public void placeFlare(Runnable runnable) {
-        if (flare != null || !flare.entity.isDead || !Config.getInstance().FEATURE_AUTO_FLARE || !timer.hasElasped(5000)) return;
-        timer.reset();
+        if ((flare != null && !flare.entity.isDead) || !Config.getInstance().FEATURE_AUTO_FLARE) {
+            MacroHandler.getInstance().setStep(Config.getInstance().AUTO_KILL_HYPE_FISHING ? MacroHandler.Step.FIND_ROD : MacroHandler.Step.ROTATE_BACK);
+            runnable.run();    
+            return;
+        }
 
         Multithreading.runAsync(() -> {
             try {
                 int slot = InventoryUtils.searchItem("Flare") == -1 ? InventoryUtils.searchItem("Orb") : InventoryUtils.searchItem("Flare");
 
                 if (slot == -1) {
+                    MacroHandler.getInstance().setEnabled(false);
                     LogUtils.sendError("No flux or flare found in hotbar");
                 } else {
                     if (!Config.getInstance().AUTO_KILL_HYPE_FISHING && InventoryUtils.searchItem("Orb") != -1) {
@@ -72,8 +73,9 @@ public class AutoFlare extends Feature {
                     }
                 }
             } catch (Exception error) {}
+            
+            MacroHandler.getInstance().setStep(Config.getInstance().AUTO_KILL_HYPE_FISHING && InventoryUtils.searchItem("Orb") == -1 ? MacroHandler.Step.FIND_ROD : MacroHandler.Step.ROTATE_BACK);
             runnable.run();
-            timer.reset();
         });
     }
 
@@ -111,7 +113,7 @@ public class AutoFlare extends Feature {
             ItemStack head = as.getEquipmentInSlot(4);
             if (head == null || !head.hasTagCompound()) continue;
             Type type = getFlareType(head);
-            if (type == null || this.flare != null || !this.flare.entity.isDead) continue;
+            if (type == null || (this.flare != null && !this.flare.entity.isDead)) continue;
             if (type == getTypeHotbar()) this.flare = new Flare(armorstand, type);
         }
     }
@@ -148,8 +150,7 @@ public class AutoFlare extends Feature {
                         for (EntityArmorStand surroundingArmorStand : surroundingArmorStands) {
                             ItemStack helmet = surroundingArmorStand.getCurrentArmor(3);
                             if (helmet != null) {
-                                if (this.flare == null || (this.flare.type == getTypeHotbar())) continue;
-                                this.flare = new Flare(surroundingArmorStand, orb);
+                                if (this.flare == null || (this.flare != null  && this.flare.type == getTypeHotbar())) this.flare = new Flare(surroundingArmorStand, orb);
                             }
                         }
                     }

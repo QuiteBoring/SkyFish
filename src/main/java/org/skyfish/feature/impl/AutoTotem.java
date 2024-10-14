@@ -7,38 +7,26 @@ import net.minecraft.util.*;
 import org.skyfish.feature.Feature;
 import org.skyfish.handler.MacroHandler;
 import org.skyfish.handler.RotationHandler;
-import org.skyfish.util.Timer;
 import org.skyfish.util.*;
+import org.skyfish.util.helper.Rotation;
 
 import java.util.List;
 
 public class AutoTotem extends Feature {
 
-    private Timer timer = new Timer();
-
     public AutoTotem() {
         super("AutoTotem");
     }
 
-    @Override
-    public void start() {
-        timer.reset();
-    }
-
-    @Override 
-    public void stop() {
-        timer.reset();
-    }
-
     public void placeTotem() {
-        if (!Config.getInstance().FEATURE_AUTO_TOTEM || !timer.hasElasped(5000)) return;
-        timer.reset();
+        if (!Config.getInstance().FEATURE_AUTO_TOTEM) return;
 
         Multithreading.runAsync(() -> {
             try {
                 int slot = InventoryUtils.searchItem("Totem");
 
                 if (slot == -1) {
+                    MacroHandler.getInstance().setEnabled(false);
                     LogUtils.sendError("No totem found in hotbar");
                 } else {
                     BlockPos block = findProperBlock();
@@ -50,10 +38,13 @@ public class AutoTotem extends Feature {
                         KeybindUtils.rightClick();
                         Thread.sleep(100);
                     }
+
+                    Rotation data = MacroHandler.getInstance().getAngle();
+                    RotationHandler.getInstance().easeTo(data.getYaw(), data.getPitch(), 200);
+                    Thread.sleep(200);
+                    MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_WEAPON);
                 }
             } catch (Exception error) {}
-            timer.reset();
-            MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_WEAPON);
         });
     }
 

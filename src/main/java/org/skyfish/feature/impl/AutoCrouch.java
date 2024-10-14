@@ -25,7 +25,6 @@ public class AutoCrouch extends Feature {
 
     @Override
     public void stop() {
-        KeyBinding.setKeyBindState(mc.gameSettings.keyBindSneak.getKeyCode(), false);
         super.stop();
     }
 

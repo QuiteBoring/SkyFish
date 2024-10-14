@@ -35,12 +35,6 @@ public class AntiAFK extends Feature {
         }
     }
 
-    private MovementState currentMovement = MovementState.LEFT;
-    private enum MovementState {
-        LEFT,
-        RIGHT;
-    }
-
     private static AntiAFK instance;
     public static AntiAFK getInstance() {
         if (instance == null) {
