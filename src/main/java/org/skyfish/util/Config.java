@@ -27,7 +27,7 @@ public class Config extends Vigilant {
             category = "Auto Kill"
     )
     public int AUTO_KILL_WEAPON = 0;
-
+    
     @Property(
             type = PropertyType.SWITCH,
             name = "Hype Fishing",
@@ -43,7 +43,7 @@ public class Config extends Vigilant {
             category = "Auto Kill",
             subcategory = "Barn Fishing"
     )
-    public boolean AUTO_KILL_BARN_FISHING = true;
+    public boolean AUTO_KILL_BARN_FISHING = false;
 
     @Property(
             type = PropertyType.SLIDER,
@@ -54,7 +54,7 @@ public class Config extends Vigilant {
             min = 0,
             max = 20
     )
-    public int AUTO_KILL_MOB_LIMIT = 7;  
+    public int AUTO_KILL_MOB_LIMIT = 0;  
     
     @Property(
             type = PropertyType.SWITCH,
