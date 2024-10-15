@@ -145,8 +145,8 @@ public class FishingMacro extends Feature {
                         int slot = InventoryUtils.searchItems(Config.getInstance().getWeapon());
 
                         if (slot == -1) {
-                            MacroHandler.getInstance().setEnabled(false);
                             LogUtils.sendError("No weapon found in hotbar!");
+                            MacroHandler.getInstance().setEnabled(false);
                             return;
                         }
 
