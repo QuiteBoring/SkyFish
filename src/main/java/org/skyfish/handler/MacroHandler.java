@@ -52,9 +52,9 @@ public class MacroHandler {
         AudioHandler.getInstance().playSound();
         FailsafeManager.getInstance().reset();
         mainLookAtBlock = mc.thePlayer.rayTrace(100.0, 1.0f);
-        setStep(Step.FIND_ROD);
+        // setStep(Step.FIND_ROD);
         LogUtils.sendSuccess("Macro Enabled");
-        unpauseMacro();
+        // unpauseMacro();
     }
 
     public void onDisable() {
