@@ -26,8 +26,8 @@ public class AutoTotem extends Feature {
                 int slot = InventoryUtils.searchItem("Totem");
 
                 if (slot == -1) {
-                    MacroHandler.getInstance().setEnabled(false);
                     LogUtils.sendError("No totem found in hotbar");
+                    MacroHandler.getInstance().setEnabled(false);
                 } else {
                     BlockPos block = findProperBlock();
                     if (block != null) {
