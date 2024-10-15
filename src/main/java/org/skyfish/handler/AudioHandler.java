@@ -39,7 +39,6 @@ public class AudioHandler {
     public void playSound() {
         Multithreading.runAsync(() -> {
             try {
-                LogUtils.sendSuccess("Playing Failsafe Sound");
                 AudioInputStream inputStream = AudioSystem.getAudioInputStream(getClass().getResource("/skyfish/failsafe_notif.wav"));
                 if (inputStream == null) {
                     LogUtils.sendError("Failed to load sound file!");
