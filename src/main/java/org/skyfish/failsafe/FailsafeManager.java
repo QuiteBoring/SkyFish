@@ -93,16 +93,19 @@ public class FailsafeManager {
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
+        if (mc.theWorld == null || mc.thePlayer == null || !MacroHandler.getInstance().isEnabled()) return;
         failsafes.forEach((failsafe) -> failsafe.onChat(event));
     }
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
+        if (mc.theWorld == null || mc.thePlayer == null || !MacroHandler.getInstance().isEnabled()) return;
         failsafes.forEach((failsafe) -> failsafe.onPacketReceive(event));
     }
 
     @SubscribeEvent 
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        if (mc.theWorld == null || mc.thePlayer == null || !MacroHandler.getInstance().isEnabled()) return;
         failsafes.forEach((failsafe) -> failsafe.onDisconnect(event));
     }
     
