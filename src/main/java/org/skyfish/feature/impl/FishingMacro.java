@@ -92,8 +92,8 @@ public class FishingMacro extends Feature {
                         int slot = InventoryUtils.searchItem("Rod");
 
                         if (slot == -1) {
-                            MacroHandler.getInstance().setEnabled(false);
                             LogUtils.sendError("No rod found in hotbar!");
+                            MacroHandler.getInstance().setEnabled(false);
                             return;
                         }
 
