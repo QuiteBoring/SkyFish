@@ -51,8 +51,8 @@ public class AutoFlare extends Feature {
                 int slot = InventoryUtils.searchItem("Flare") == -1 ? InventoryUtils.searchItem("Orb") : InventoryUtils.searchItem("Flare");
 
                 if (slot == -1) {
-                    MacroHandler.getInstance().setEnabled(false);
                     LogUtils.sendError("No flux or flare found in hotbar");
+                    MacroHandler.getInstance().setEnabled(false);
                 } else {
                     if (!Config.getInstance().AUTO_KILL_HYPE_FISHING && InventoryUtils.searchItem("Orb") != -1) {
                         BlockPos block = findProperBlock();
