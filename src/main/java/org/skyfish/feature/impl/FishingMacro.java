@@ -79,10 +79,6 @@ public class FishingMacro extends Feature {
 
     @Override
     public void onTick() {
-        if (fishingHook == null && MacroHandler.getInstance().getStep() == MacroHandler.Step.WAIT_FOR_CATCH) {
-            KeybindUtils.rightClick();
-        }
-        
         switch (MacroHandler.getInstance().getStep()) {
             default: {
                 return;
@@ -124,6 +120,11 @@ public class FishingMacro extends Feature {
             }
 
             case WAIT_FOR_CATCH: {
+                if (fishingHook == null && lastTimeReeled.hasElasped(1000)) {
+                    KeybindUtils.rightClick();
+                    lastTimeReeled.reset();
+                }
+                
                 if (lastTimeReeled.hasElaspedOnce(60000)) {
                     KeybindUtils.rightClick();
                     LogUtils.sendError("Recasting, rod has been casted for too long...");
