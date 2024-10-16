@@ -58,18 +58,16 @@ public class AutoFlare extends Feature {
                         BlockPos block = findProperBlock();
                         if (block != null) {
                             RotationHandler.getInstance().easeToBlock(block, 500L);
-                            Thread.sleep(750);
+                            Thread.sleep(500);
                             mc.thePlayer.inventory.currentItem = slot;
-                            Thread.sleep(100);        
+                            Thread.sleep(50);        
                             KeybindUtils.rightClick();
-                            Thread.sleep(100);
                         }
                     } else {
-                        Thread.sleep(250);
+                        Thread.sleep(100);
                         mc.thePlayer.inventory.currentItem = slot;
                         Thread.sleep(100);        
                         KeybindUtils.rightClick();
-                        Thread.sleep(100);
                     }
                 }
             } catch (Exception error) {}
