@@ -1,6 +1,7 @@
 package org.skyfish;
 
 import gg.essential.api.EssentialAPI;
+import gg.essential.vigilance.Vigilance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,6 +26,9 @@ public class SkyFish {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        Vigilance.initialize();
+        Config.getInstance().preload();
+        
         ClientRegistry.registerKeyBinding(settingsKeybind);
         ClientRegistry.registerKeyBinding(macroKeybind);
 
