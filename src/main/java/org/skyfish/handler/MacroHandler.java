@@ -20,9 +20,16 @@ public class MacroHandler {
     public void onTick(TickEvent.ClientTickEvent event) {
         if (mc.theWorld == null || mc.thePlayer == null || !isEnabled()) return;
         if (mc.currentScreen != null) {
-            if (!isPaused()) pauseMacro();
+            if (!isPaused()) {
+                lastStep = getStep();
+                pauseMacro();
+                setStep(Step.NONE);_
+            }
         } else if ((mc.currentScreen == null) ) {
-            if (isPaused()) unpauseMacro();
+            if (isPaused()) {
+                unpauseMacro();
+                setStep(lastStep);_
+            };
         }
     }
 
@@ -51,7 +58,6 @@ public class MacroHandler {
         AudioHandler.getInstance().setSoundBeforeChange(mc.gameSettings.getSoundLevel(SoundCategory.MASTER));
         FailsafeManager.getInstance().reset();
         mainLookAtBlock = mc.thePlayer.rayTrace(100.0, 1.0f);
-        setStep(Step.FIND_ROD);
         LogUtils.sendSuccess("Macro Enabled");
         unpauseMacro();
     }
@@ -60,7 +66,6 @@ public class MacroHandler {
         AudioHandler.getInstance().resetSound();
         FailsafeManager.getInstance().reset();
         mainLookAtBlock = null;
-        setStep(Step.NONE);
         LogUtils.sendSuccess("Macro Disabled");
         pauseMacro();
     }
@@ -76,8 +81,10 @@ public class MacroHandler {
     public void setEnabled(boolean enabled) {
         if (enabled) {
             onEnable();
+            setStep(Step.FIND_ROD);
         } else {
             onDisable();
+            setStep(Step.NONE);
         }
     }
 
@@ -101,6 +108,7 @@ public class MacroHandler {
 
     private boolean paused = false;
     private Step currentStep = Step.NONE;
+    private Step lastStep = Step.NONE;
 
     public Step getStep() {
         return currentStep;
