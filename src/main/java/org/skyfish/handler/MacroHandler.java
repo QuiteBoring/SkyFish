@@ -23,12 +23,12 @@ public class MacroHandler {
             if (!isPaused()) {
                 lastStep = getStep();
                 pauseMacro();
-                setStep(Step.NONE);_
+                setStep(Step.NONE);
             }
         } else if ((mc.currentScreen == null) ) {
             if (isPaused()) {
                 unpauseMacro();
-                setStep(lastStep);_
+                setStep(lastStep);
             };
         }
     }
