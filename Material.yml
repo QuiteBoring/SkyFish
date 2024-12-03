@@ -1,0 +1,125 @@
+# Default themes (dark & light) will be refreshed if modified on each launch
+# if you wanna make a new theme, copy and paste this file and rename it to your
+# theme name, then edit
+
+# Colours - always start with the prefix "color(" and ends with ")".
+# You must contain 3 (RGB) or 4 (RGBA) digits ranging between 0-255
+
+# Shapes - always start with prefix "shape(" and end with ")"
+# Must be one of three: RECTANGLE, ROUNDED_RECTANGLE, CIRCLE
+# Note that rectangle will render the fastest, and the other two may slightly decrease performance, especially circle.
+
+# Toggle - always start with prefix "toggle(" and end with ")"
+# Must be one of three: optional, on, off
+# Optional means that the user can toggle it to what they want in the main menu
+
+# Don't change this unless you have updated this to the newest version
+theme-version: "1.1"
+
+name: "Material"
+
+general:
+  use-default-minecraft-font: "toggle(optional)"
+  high-quality-rendering: "toggle(optional)"
+
+hud:
+  shape: "shape(ROUNDED_RECTANGLE)"
+  colour:
+    background: "color(0, 0, 0, 62)"
+    text-primary-on: "color(110, 232, 39)"
+    text-normal: "color(171, 178, 191)"
+    text-primary-off: "color(212, 51, 80)"
+
+window:
+  colour:
+    background: "color(15,17,19)"
+  shape: "shape(ROUNDED_RECTANGLE)"
+
+panels:
+  colour:
+    background: "color(23,23,27)"
+    scroller: "color(57,59,61)"
+    scroller-hover: "color(81,81,82)"
+  shape: "shape(ROUNDED_RECTANGLE)"
+
+menu-selection:
+  colour:
+    background: "color(23,23,27)"
+    not-selected-icon: "color(57,59,61)"
+    selected-icon: "color(81,81,82)"
+    hover-icon: "color(81,81,82)"
+  shape: "shape(ROUNDED_RECTANGLE)"
+
+text:
+  colour:
+    standard: "color(128, 128, 128)"
+    subtitle: "color(219, 223, 224)"
+    title: "color(128, 128, 128)"
+    categories-title: "color(219, 223, 224)"
+    selected-category: "color(210,213,216)"
+    hover-category: "color(210,213,216)"
+    search-top-result: "color(128, 128, 128)"
+  misc:
+    disable-shadows: false # recommended on for light theme, they look weird
+
+components:
+  general:
+    colour:
+      background: "color(32,34,38)"
+      background-hover: "color(42,44,49)"
+      background-hover-2: "color(42,44,49)"
+    shape: "shape(ROUNDED_RECTANGLE)"
+  text-enter:
+    colour:
+      valid: "color(50, 130, 50)"
+      invalid: "color(150, 50, 50)"
+      unfocused: "color(34, 34, 34)"
+      unfocused-hover: "color(37, 37, 37)"
+    shape: "shape(ROUNDED_RECTANGLE)"
+  toggle:
+    colour:
+      enabled: "color(50, 130, 50)"
+      enabled-hover: "color(85, 163, 85)"
+      disabled: "color(150, 50, 50)"
+      disabled-hover: "color(177, 74, 74)"
+      icon: "color(191, 191, 191, 220)"
+    shapes:
+      bar: "shape(ROUNDED_RECTANGLE)"
+      icon: "shape(ROUNDED_RECTANGLE)"
+  slider:
+    colour:
+      bar: "color(150, 50, 50)"
+      bar-hover: "color(177, 74, 74)"
+      icon: "color(191, 191, 191, 220)"
+    shapes:
+      bar: "shape(ROUNDED_RECTANGLE)"
+      icon: "shape(CIRCLE)"
+  selection:
+    colour:
+      normal: "color(34, 34, 34)"
+      hover: "color(37, 37, 37)"
+    shape: "shape(ROUNDED_RECTANGLE)"
+  safety-slider:
+    colour:
+      safe: "color(50, 130, 50)"
+      warning: "color(130, 119, 50)"
+      danger: "color(150, 50, 50)"
+  multi-farm-options:
+    colour:
+      background: "color(30, 30, 30, 230)"
+      background-hover: "color(48, 48, 48)"
+      background-selected: "color(58, 58, 58)"
+      text-selected: "color(155, 155, 155)"
+    shape: "shape(ROUNDED_RECTANGLE)"
+  banwave:
+    colour:
+      safe: "color(50, 130, 50)"
+      warning: "color(130, 119, 50)"
+      danger: "color(150, 50, 50)"
+  async-image:
+    colour:
+      loading: "color(150, 50, 50)"
+
+# animations
+# paddings
+# window size
