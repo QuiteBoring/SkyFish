@@ -242,6 +242,20 @@ public class AutoKill extends Feature {
         put("A Lava Blaze has surfaced from the depths!", "Lava Blaze");
         put("A Lava Pigman arose from the depths!", "Lava Pigman");
         put("A Vanquisher is spawning nearby!", "Vanquisher");
+        put("Is it a frog? Is it a man? Well, yes, sorta, IT'S FROG MAN!!!!!!", "Frog Man");
+        put("A Snapping Turtle is coming your way, and it's ANGRY!", "Snapping Turtle");
+        put("The water bubbles and froths. A massive form emerges- you have disturbed the Wiki Tiki! You shall pay the price.", "Wiki Tiki");
+        put("A garish set of tentacles arise. It's a Blue Ringed Octopus!", "Blue Ringed Octopus");
+        put("A Fiery Scuttler inconspicuously waddles up to you, friends in tow.", "Fiery Scuttler");
+        put("Smells of burning. Must be a Fried Chicken.", "Fried Chicken");
+        put("Trouble's brewing, it's a Fireproof Witch!", "Fireproof Witch");
+        put("The sky darkens and the air thickens. The end times are upon us: Ragnarok is here.", "Ragnarok");
+        put("A massive Titanoboa surfaces. It's body stretches as far as the eye can see.", "Titanoboa");
+        put("A swampy mass of slime emerges, the Bayou Sludge!", "Bayou Sludge");
+        put("A Dumpster Diver has emerged from the swamp!", "Dumpster Diver");
+        put("A long snout breaks the surface of the water. It's an Alligator!", "Alligator");
+        put("The desolate wail of a Banshee breaks the silence.", "Banshee");
+        put("The Trash Gobbler is hungry for you!", "Trash Gobbler");
     }};
 
 }
