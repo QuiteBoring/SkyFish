@@ -59,5 +59,3 @@ jobs:
             ${{ github.event.head_commit.message }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
-
-      
