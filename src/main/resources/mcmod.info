@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "${modid}",
+    "name": "SkyFish",
+    "description": "A QOL fishing mod for Hypixel Skyblock.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
