@@ -75,6 +75,20 @@ public class FishingMacro extends Feature {
                 MacroHandler.getInstance().setStep(MacroHandler.Step.CATCH);
             }
         }
+        if (event.packet instanceof S02PacketChat) {
+            IChatComponent chatComponent = ((S02PacketChat) event.packet).getChatComponent();
+            if (chatComponent != null) {
+                String unformattedText = chatComponent.getUnformattedText();
+                if (unformattedText.contains("The Golden Fish escapes your hook but looks weakened.")) {
+                    MacroHandler.getInstance().setStep(MacroHandler.Step.THROW_ROD);
+                }
+                
+                if (unformattedText.contains("The Golden Fish is weak!")) {
+                    MacroHandler.getInstance().setStep(MacroHandler.Step.CATCH);
+        }
+    }
+}
+
     }
 
     @Override
@@ -124,8 +138,10 @@ public class FishingMacro extends Feature {
                     KeybindUtils.rightClick();
                     lastTimeReeled.reset();
                 }
-                
-                if (lastTimeReeled.hasElaspedOnce(60000)) {
+
+                // check to see if the rod has been casted for more than 10 seconds
+                // if so then recast the rod                
+                if (lastTimeReeled.hasElaspedOnce((Config.getInstance().getDelay(Config.getInstance().ROD_RECAST_DELAY)*1000))) {
                     KeybindUtils.rightClick();
                     LogUtils.sendError("Recasting, rod has been casted for too long...");
                     MacroHandler.getInstance().setStep(MacroHandler.Step.FIND_ROD);
