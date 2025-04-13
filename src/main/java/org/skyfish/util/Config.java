@@ -237,12 +237,22 @@ public class Config extends Vigilant {
     @Property(
             type = PropertyType.SLIDER,
             name = "Recast (ms)",
-            description = "Delay when recasting",
+            description = "Delay when recasting after a normal catch",
             category = "Delays",
             min = 0,
-            max = 500
+            max = 1500
     )
     public int DELAYS_RECAST = 100;  
+
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "Rod Cast Timer (seconds)",
+            description = "How long to wait before recasting rod",
+            category = "Delays",
+            min = 5,
+            max = 60
+    )
+    public int ROD_RECAST_DELAY = 10;  
 
     @Property(
             type = PropertyType.SLIDER,
@@ -260,7 +270,7 @@ public class Config extends Vigilant {
     }
 
     public String[] getWeapon() {
-        String[][] weapons = new String[][] { new String[] { "Hyperion", "Scylla", "Astraea", "Valkyrie" }, new String[] { "Fire Veil" }};
+        String[][] weapons = new String[][] { new String[] { "Hyperion", "Scylla", "Astraea", "Valkyrie", "Yeti Sword", "Spirit Sceptre" }, new String[] { "Fire Veil" }};
         return weapons[AUTO_KILL_WEAPON];
     }
 
