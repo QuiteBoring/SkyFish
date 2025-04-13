@@ -87,6 +87,7 @@ public class AutoKill extends Feature {
                         fishedUpMobs.clear();
                     });
                 }
+                MacroHandler.getInstance().setStep(MacroHandler.Step.ROTATE_BACK);
                 return;
             }
         }
@@ -124,16 +125,20 @@ public class AutoKill extends Feature {
     }
     
     private List<Entity> getEntity() {
-        return mc.theWorld.getEntitiesInAABBexcluding(mc.thePlayer,
-                mc.thePlayer.getEntityBoundingBox().expand(6, (6 >> 1), 6), e -> e instanceof EntityArmorStand).stream()
-                .filter((v) -> v.getDistanceToEntity(mc.thePlayer) < 6 &&
-                !v.getName().contains(mc.thePlayer.getName()) &&
-                !v.isDead &&
-                mobs.values().stream().anyMatch((a) -> v.getCustomNameTag().contains(a)) &&
-                ((EntityLivingBase) v).getHealth() > 0)
-                .filter((entity) -> mc.thePlayer.canEntityBeSeen(entity))
-                .collect(Collectors.toList());
+    return mc.theWorld.getEntitiesInAABBexcluding(mc.thePlayer,
+            mc.thePlayer.getEntityBoundingBox().expand(6, 3, 6), 
+            e -> e instanceof EntityArmorStand).stream()
+        .filter((v) -> v.getDistanceToEntity(mc.thePlayer) < 6 &&
+                       !v.getName().contains(mc.thePlayer.getName()) &&
+                       !v.isDead &&
+                       v.getName().contains("❤") &&
+                       mobs.values().stream().anyMatch((a) -> v.getCustomNameTag().contains(a)) &&
+                       ((EntityLivingBase) v).getHealth() > 0 &&
+                       mc.thePlayer.canEntityBeSeen(v))
+        .collect(Collectors.toList());
     }
+
+
 
     private Entity getEntityCuttingOtherEntity(Entity e, Class<?> entityType) {
         List<Entity> possible = mc.theWorld.getEntitiesInAABBexcluding(e, e.getEntityBoundingBox().expand(0.3D, 2.0D, 0.3D), a -> {
